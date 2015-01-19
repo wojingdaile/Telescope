@@ -61,7 +61,7 @@
 >> limit: 获取的post的数量
 >> skip: 从第几个post开始取
 >> post_id: 获取哪个帖子的回复
->> comment_id：获取哪个回复的回复，优先级大于post_id
+>> comment_id：获取哪个回复的回复，优先级大于post_id(目前还没有需求要获取一个回复的回复，该参数还未支持)
 
 ###回复Comment：**POST** [/api/comments]
 > POST 结构
