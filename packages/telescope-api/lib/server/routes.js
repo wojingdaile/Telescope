@@ -1,15 +1,5 @@
 Meteor.startup(function () {
 
-  Router.route('api', {
-    where: 'server',
-    path: '/api/:limit?',
-    action: function() {
-      var limit = parseInt(this.params.limit);
-      this.response.write(serveAPI(limit));
-      this.response.end();
-    }
-  });
-
   Router.route('categories', {
     where: 'server',
     path: '/api/categories/:limit?',
@@ -31,4 +21,17 @@ Meteor.startup(function () {
     }
   });
 
+  Router.route('comments', {
+    where: 'server',
+    path: '/api/comments/',
+    action: function(){
+  
+      var post_id = this.params.query.post_id;
+      var comment_id = this.params.query.comment_id;
+      var limit = parseInt(this.params.query.limit);
+      var skip = parseInt(this.params.query.skip);
+      this.response.write(GetComments(post_id, comment_id, limit, skip));
+      this.response.end();
+    }
+  });
 });
