@@ -4,7 +4,7 @@ Package.onUse(function (api) {
 
   api.use(['telescope-base', 'telescope-lib'], ['server']);
 
-  api.add_files(['lib/server/api.js', 'lib/server/routes.js'], ['server']);
+  api.add_files(['lib/server/api.js', 'lib/server/routes.js', 'lib/server/categories.js', 'lib/server/posts.js'], ['server']);
 
   api.export(['serveAPI']);
 
