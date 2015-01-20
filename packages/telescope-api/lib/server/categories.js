@@ -3,9 +3,64 @@ GetCategories = function(limitSegment){
   var limit = typeof limitSegment === 'undefined' ? 20 : limitSegment // default limit: 20 posts
 
   Categories.find({}, {sort: {order: 1, name: 1}, limit: limit}).forEach(function (category) {
-    console.log('category: ', category);
     categories.push(category);
   });
 
   return JSON.stringify(categories);
 };
+
+AddCategory = function(newCategory,response){
+
+	Categories.insert(newCategory,function callback(error, categoryId){
+		if (error) {
+			var result = {
+				result: false,
+				error: error
+			};
+			console.log("error :" + error);
+			response.write(JSON.stringify(result));
+		}
+		else{
+			var result = {
+				result: true,
+				categoryId: categoryId
+			};
+			console.log("insert success: " + categoryId);
+			response.write(JSON.stringify(result));
+		}
+		response.end();
+	});
+};
+
+DeleteCategory = function(deleteCategoryId, response){
+
+	var deleteCategory = Categories.findOne({_id: deleteCategoryId});
+	
+	if(deleteCategory){
+		Categories.remove(deleteCategory , function callBack(error){
+			if (error) {
+				var result = {
+					result: false,
+					error: error
+				};
+				response.write(JSON.stringify(result));
+				response.end();
+			}
+			else{
+				var result = {
+					result: true
+				};
+				response.write(JSON.stringify(result));
+				response.end();
+			}
+		});
+	}
+	else{
+		var result = {
+					result: false,
+					reson: "category not fonud"
+				};
+				response.write(JSON.stringify(result));
+				response.end();
+	}
+}
