@@ -6,6 +6,7 @@ Meteor.startup(function () {
     action: function() {
 
       var method = this.request.method;
+      this.response.writeHead(200, {"Content-Type": "text/json"});
       switch(method){
         case "GET":{
           var limit = parseInt(this.params.query.limit);
@@ -36,6 +37,7 @@ Meteor.startup(function () {
     action: function() {
 
       var method = this.request.method;
+      this.response.writeHead(200, {"Content-Type": "text/json"});
       switch(method){
         case "GET":{
           var category = this.params.query.category;
@@ -87,6 +89,7 @@ Meteor.startup(function () {
     action: function(){
       
       var method = this.request.method;
+      this.response.writeHead(200, {"Content-Type": "text/json"});
       switch(method){
 
         case "GET":{
