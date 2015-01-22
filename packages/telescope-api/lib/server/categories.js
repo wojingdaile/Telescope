@@ -6,7 +6,10 @@ GetCategories = function(limitSegment){
     categories.push(category);
   });
 
-  return JSON.stringify(categories);
+  var res = {
+  	categories: categories
+  };
+  return JSON.stringify(res);
 };
 
 AddCategory = function(newCategory,response){

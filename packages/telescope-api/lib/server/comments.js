@@ -30,8 +30,10 @@ GetComments = function(post_id, comment_id, limit, skip){
             comments.splice(index,1);
           });
 	}
-
-	return JSON.stringify(comments);
+  var res = {
+    comments: comments
+  };
+	return JSON.stringify(res);
 		
 };
 

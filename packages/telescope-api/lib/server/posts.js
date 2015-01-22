@@ -3,12 +3,9 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
   var category = typeof limitSegment === 'undefined' ? 'top' : categorySegment;
   var limit = typeof limitSegment === 'undefined' ? 20 : limitSegment // default limit: 20 posts
   skip  = typeof skip === 'undefined' ? 0 : skip;
-  console.log("+++++++++++: " + category);
-  var post =  Posts.findOne();
-  console.log("xxxxxx: " + post.categories + STATUS_APPROVED);
 
   Posts.find({categories: [category], status: STATUS_APPROVED}).forEach(function(post) {
-    console.log("find a post " + post.name);
+    
     var url = getPostLink(post);
     var properties = {
       title: post.title,
@@ -64,8 +61,10 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
 
           posts.push(properties);
         });
-
-        return JSON.stringify(posts);
+        var res = {
+          posts: posts
+        };
+        return JSON.stringify(res);
       };
 
 
