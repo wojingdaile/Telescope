@@ -32,6 +32,17 @@ json
 >删除一个Category
 >><_id>：删除category的id
 
+```
+{
+    "result": true,
+    "categoryId": "52KXqJPBF8F9o4JEA"
+}
+
+{
+    "result": false,
+    "error": "error info"
+}
+```
 #Post
 ###获取Posts：**GET** [/api/posts?limit=10&skip=20&category=<_id>]()
 >获取Post
@@ -40,7 +51,6 @@ json
 >> skip: 从第几个post开始取
 
 >> category: 从哪个category获取posts
-
 ```
 json
 {
@@ -93,7 +103,6 @@ json
 >> limit: 获取的comment的数量
 
 >> skip: 从第几个comment开始取
-
 ```
 json
 {

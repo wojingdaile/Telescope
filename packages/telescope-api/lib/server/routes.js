@@ -49,33 +49,11 @@ Meteor.startup(function () {
           break;
         }
         case "POST":{
-          var newPost = {
-              author : this.request.body.author,
-              baseScore : this.request.body.baseScore,
-              body : this.request.body.body,
-              clickCount : this.request.body.clickCount,
-              commentCount : this.request.body.commentCount,
-              commenters : this.request.body.commenters,
-              createdAt : this.request.body.createdAt,
-              downvotes : this.request.body.downvotes,
-              htmlBody : this.request.body.htmlBody,
-              inactive : this.request.body.inactive,
-              lastCommentedAt : this.request.body.lastCommentedAt,
-              postedAt : this.request.body.postedAt,
-              score : this.request.body.score,
-              status : this.request.body.status,
-              sticky : this.request.body.sticky,
-              title : this.request.body.title,
-              upvoters : this.request.body.upvoters,
-              upvotes : this.request.body.upvotes,
-              userId : this.request.body.userId,
-              viewCount : this.request.body.viewCountÏ
-          };
-          AddPost(newPost, this.response);
+          AddPost(this.request.body, this.response);
           break;
         }
         case "DELETE":{
-          var deletePostId = this.params.query.postid;
+          var deletePostId = this.params.query.postId;
           DeletePost(deletePostId, this.response);
           break;
         }
@@ -94,8 +72,8 @@ Meteor.startup(function () {
 
         case "GET":{
           // get comments
-          var post_id = this.params.query.post_id;
-          var comment_id = this.params.query.comment_id;
+          var post_id = this.params.query.postId;
+          var comment_id = this.params.query.commentId;
           var limit = parseInt(this.params.query.limit);
           var skip = parseInt(this.params.query.skip);
           this.response.write(GetComments(post_id, comment_id, limit, skip));
@@ -104,37 +82,7 @@ Meteor.startup(function () {
         }
         case "POST":{
           // post new comment to a comment
-          var author = this.request.body["author"];
-          var baseScore = this.request.body["baseScore"];
-          var body = this.request.body["body"];
-          var createdAt = this.request.body["createdAt"];
-          var downvotes = parseInt(this.request.body["downvotes"]);
-          var htmlBody = this.request.body["htmlBody"];
-          var author = this.request.body["inactive"];
-          var postId = this.request.body["postId"];
-          var postedAt = this.request.body["postedAt"];
-          var score = this.request.body["score"];
-          var upvoters = this.request.body["upvoters"];
-          var upvotes = parseInt(this.request.body["upvotes"]);
-          var userId = this.request.body["userId"];
-
-          var newComment = {
-            author: author,
-            baseScore: baseScore,
-            body: body,
-            createdAt: createdAt,
-            downvotes: downvotes,
-            htmlBody: htmlBody,
-            author: author,
-            postId: postId,
-            postedAt: postedAt,
-            score: score,
-            upvoters: upvoters,
-            upvotes: upvotes,
-            userId: userId
-          };
-
-          AddComment(newComment, this.response);
+          AddComment(this.request.body, this.response);
 
           break;
         }

@@ -5,7 +5,7 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
   skip  = typeof skip === 'undefined' ? 0 : skip;
 
   Posts.find({categories: [category], status: STATUS_APPROVED}).forEach(function(post) {
-    
+
     var url = getPostLink(post);
     var properties = {
       title: post.title,
@@ -103,6 +103,7 @@ DeletePost = function(deletePostId, response){
 
 AddPost = function(newPost, response){
 
+  console.log("bsubxbwbcbewubciubicw  " + newPost);
   Posts.insert(newPost, function(error, newPostId){
     if (error) {
       var result = {
