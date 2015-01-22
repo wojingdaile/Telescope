@@ -17,7 +17,6 @@ AddCategory = function(newCategory,response){
 				result: false,
 				error: error
 			};
-			console.log("error :" + error);
 			response.write(JSON.stringify(result));
 		}
 		else{
@@ -25,7 +24,6 @@ AddCategory = function(newCategory,response){
 				result: true,
 				categoryId: categoryId
 			};
-			console.log("insert success: " + categoryId);
 			response.write(JSON.stringify(result));
 		}
 		response.end();

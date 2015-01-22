@@ -3,8 +3,12 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
   var category = typeof limitSegment === 'undefined' ? 'top' : categorySegment;
   var limit = typeof limitSegment === 'undefined' ? 20 : limitSegment // default limit: 20 posts
   skip  = typeof skip === 'undefined' ? 0 : skip;
+  console.log("+++++++++++: " + category);
+  var post =  Posts.findOne();
+  console.log("xxxxxx: " + post.categories + STATUS_APPROVED);
 
-  Posts.find({categories: [category], status: STATUS_APPROVED}, {sort: {postedAt: -1}, skip: skip, limit: limit}).forEach(function(post) {
+  Posts.find({categories: [category], status: STATUS_APPROVED}).forEach(function(post) {
+    console.log("find a post " + post.name);
     var url = getPostLink(post);
     var properties = {
       title: post.title,
@@ -63,3 +67,58 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
 
         return JSON.stringify(posts);
       };
+
+
+
+DeletePost = function(deletePostId, response){
+
+  var deletePostItem = Posts.findOne({_id: deletePostId});
+  if(deletePostItem){
+    Posts.remove(deletePostItem, function(error){
+      if(error){
+        var result = {
+          result: false,
+          error: error
+        };
+        response.write(JSON.stringify(result));
+        response.end();
+      }
+      else{
+        var result = {
+          result: true
+        };
+        response.write(JSON.stringify(result));
+        response.end();
+      }
+    });
+  }
+  else{
+    var result = {
+      result: false,
+      reson: "delete post not found"
+    };
+    response.write(JSON.stringify(result));
+    response.end();
+  }
+}
+
+AddPost = function(newPost, response){
+
+  Posts.insert(newPost, function(error, newPostId){
+    if (error) {
+      var result = {
+        result: false,
+        error: error
+      };
+      response.write(JSON.stringify(result));
+    }
+    else{
+      var result = {
+        result: true,
+        postId: newPostId
+      };
+      response.write(JSON.stringify(result));
+    }
+    response.end();
+  })
+}

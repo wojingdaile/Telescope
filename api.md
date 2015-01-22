@@ -72,9 +72,9 @@ json
 
 
 #Comments
-###获取Comments：**GET** [/api/comments?post_id=<_id>&limit=10&skip=20]()
+###获取Comments：**GET** [/api/comments?postId=<_id>&limit=10&skip=20]()
 >获取Comments
->> post_id: 获取的哪个帖子的回复
+>> postId: 获取的哪个帖子的回复
 
 >> limit: 获取的comment的数量
 
@@ -110,7 +110,7 @@ json
 > ><_id>:需要删除的comment的id
 
 #回复post
-###回复Post：**POST** [/api/commentpost]()
+###回复Post：**POST** [/api/commentPost]()
 > POST 数据结构
 
 ```

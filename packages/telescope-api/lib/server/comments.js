@@ -34,3 +34,61 @@ GetComments = function(post_id, comment_id, limit, skip){
 	return JSON.stringify(comments);
 		
 };
+
+AddComment = function(newComment, response){
+
+  Comments.insert(newComment, function(error, commentId){
+
+    if (error) {
+      var result = {
+        result: false,
+        error: error
+      };
+      response.write(JSON.stringify(result));
+    }
+    else{
+      var result = {
+        result: true,
+        commentId: commentId
+      };
+      response.write(JSON.stringify(result));
+    }
+    response.end();
+  });
+}
+
+DeleteComment = function(comment_id, response){
+
+  if(comment_id){
+
+    var deleteComment = Comments.findOne({_id: comment_id});
+    if(deleteComment){
+
+      Comments.remove(deleteComment, function(error){
+        if (error) {
+          var result = {
+            result: false,
+            error: error
+          };
+          response.write(JSON.stringify(result));
+          response.end();
+        }
+        else{
+          var result = {
+          result: true
+          };
+          response.write(JSON.stringify(result));
+          response.end();
+        }
+      });
+    }
+    else{
+      var result = {
+        result: false,
+        reson: "comment not found"
+      };
+      response.write(JSON.stringify(result));
+      response.end();
+    }
+  }
+}
