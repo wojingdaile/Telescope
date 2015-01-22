@@ -26,7 +26,7 @@ json
 >><_id>：删除category的id
 
 #Post
-###获取Posts：**GET** [/api/post?limit=10&skip=20&category=<_id>]()
+###获取Posts：**GET** [/api/posts?limit=10&skip=20&category=<_id>]()
 >获取Post
 >> limit: 获取的post的数量
 
