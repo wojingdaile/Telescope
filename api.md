@@ -8,6 +8,13 @@
 ###获取Category：**GET** [/api/category?limit=3]()
 >limit参数为需要获取的category个数
 
+```
+json
+{
+	categories:[]
+}
+```
+
 ###创建Category：**POST** [/api/category]()
 >POST 数据结构：
 
@@ -33,6 +40,13 @@ json
 >> skip: 从第几个post开始取
 
 >> category: 从哪个category获取posts
+
+```
+json
+{
+	posts:[]
+}
+```
 
 ###创建Post：**POST** [/api/post]()
 > POST 数据结构
@@ -80,6 +94,12 @@ json
 
 >> skip: 从第几个comment开始取
 
+```
+json
+{
+	comments:[]
+}
+```
 
 ###回复Comment：**POST** [/api/comments]()
 > POST 结构
