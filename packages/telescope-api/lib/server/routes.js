@@ -49,7 +49,14 @@ Meteor.startup(function () {
           break;
         }
         case "POST":{
-          AddPost(this.request.body, this.response);
+          var result = GetPostFromJsonString(this.request.body);
+          if(!result.res){
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
+          else{
+            AddPost(result.post, this.response);
+          }
           break;
         }
         case "DELETE":{
@@ -93,7 +100,56 @@ Meteor.startup(function () {
           break;
         }
       }
-      
+    }
+  });
+
+  Router.route('commentPost',{
+    where: 'server',
+    path: '/api/commentPost',
+    action: function(){
+
+      this.response.writeHead(200, {"Content-Type": "text/json"});
+      AddPostComment(this.request.body, this.response);
+    }
+  });
+
+  Router.route('upvote',{
+    where: 'server',
+    path: '/api/upvote',
+    action: function(){
+
+      var type = this.request.query.type;
+      var id = this.request.query.id;
+      if("post" === type){
+        UpVotePost(id, this.response);
+      }
+      else if("comment" === type){
+        UpVoteComment(id, this.response);
+      }
+      else{
+        this.response.write("{error: params error}");
+        this.response.end();
+      }
+    }
+  });
+
+  Router.route('downvote',{
+    where: 'server',
+    path: '/api/downvote',
+    action: function(){
+
+      var type = this.request.query.type;
+      var id = this.request.query.id;
+      if("post" === type){
+        DownVotePost(id, this.response);
+      }
+      else if("comment" === type){
+        DownVoteComment(id, this.response);
+      }
+      else{
+        this.response.write("{error: params error}");
+        this.response.end();
+      }
     }
   });
 });

@@ -1,3 +1,44 @@
+GetPostFromJsonString = function(jsonString){
+
+  var providePostProperties = ['author', 'body', 'categories', 'htmlBody', 'inactive', 'status', 'sticky', 'title', 'userId'];
+  var defaultPost = {
+       baseScore: 0,
+       clickCount: 0, 
+       commentConut: 0, 
+       commenters: 0, 
+       createdAt: new Date(), 
+       downvotes: 0, 
+       postedAt: new Date(), 
+       score: 0, 
+       upvoters: [],
+       upvotes: 0, 
+       viewCount: 0
+  };
+
+    var newPost = defaultPost;
+    var result;
+    for(i in providePostProperties){
+      
+      var property = providePostProperties[i];
+      if(jsonString[property] == undefined){
+
+          result = {
+          res: false,
+          error: "property not found: " + property
+        };
+          break;
+      }
+      else{
+          newPost[property] = jsonString[property];
+          result = {
+            res: true,
+            post: newPost
+          };
+      }
+    }
+    return result;
+}
+
 GetCategoryPosts = function(categorySegment, limitSegment, skip){
   var posts = [];
   var category = typeof limitSegment === 'undefined' ? 'top' : categorySegment;
@@ -25,6 +66,7 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
         if(twitterName = getTwitterNameById(post.userId))
           properties.twitterName = twitterName;
 
+          /*
           var comments = [];
 
           Comments.find({postId: post._id}, {sort: {postedAt: -1}, limit: 50}).forEach(function(comment) {
@@ -58,7 +100,7 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
           });
 
           properties.comments = comments;
-
+          */
           posts.push(properties);
         });
         var res = {
@@ -103,7 +145,6 @@ DeletePost = function(deletePostId, response){
 
 AddPost = function(newPost, response){
 
-  console.log("bsubxbwbcbewubciubicw  " + newPost);
   Posts.insert(newPost, function(error, newPostId){
     if (error) {
       var result = {
