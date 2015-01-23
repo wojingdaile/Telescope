@@ -64,29 +64,14 @@ json
 ```
 {
     "author" : "xionggai",
-    "baseScore" : 1,
-    "body" : "Hello World",
-    "clickCount" : 0,
-    "commentCount" : 5,
-    "commenters" : [ 
-        "AtkugG9xemuc5yKge"
-    ],
-    "createdAt" : ISODate("2015-01-19T06:21:29.592Z"),
-    "downvotes" : 0,
+    "body":  "Hello World",
+    "categories": [],
     "htmlBody" : "<p>Hello World</p>\n",
     "inactive" : false,
-    "lastCommentedAt" : ISODate("2015-01-19T08:46:15.438Z"),
-    "postedAt" : ISODate("2015-01-19T06:21:00.000Z"),
-    "score" : 0.004025308134229659,
     "status" : 2,
     "sticky" : false,
     "title" : "just for test",
-    "upvoters" : [ 
-        "AtkugG9xemuc5yKge"
-    ],
-    "upvotes" : 1,
     "userId" : "AtkugG9xemuc5yKge",
-    "viewCount" : 9
 }
 ```
 
