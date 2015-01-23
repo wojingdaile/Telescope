@@ -133,6 +133,7 @@ Meteor.startup(function () {
 
       var type = this.request.query.type;
       var id = this.request.query.id;
+      this.response.writeHead(200, {"Content-Type": "text/json"});
       if("post" === type){
         UpVotePost(id, this.response);
       }
@@ -153,6 +154,7 @@ Meteor.startup(function () {
 
       var type = this.request.query.type;
       var id = this.request.query.id;
+      this.response.writeHead(200, {"Content-Type": "text/json"});
       if("post" === type){
         DownVotePost(id, this.response);
       }
