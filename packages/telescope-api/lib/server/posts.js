@@ -5,7 +5,7 @@ GetPostFromJsonString = function(jsonString){
        baseScore: 0,
        clickCount: 0, 
        commentConut: 0, 
-       commenters: 0, 
+       commenters: [], 
        createdAt: new Date(), 
        downvotes: 0, 
        postedAt: new Date(), 
@@ -145,12 +145,14 @@ DeletePost = function(deletePostId, response){
 
 AddPost = function(newPost, response){
 
+  console.log(newPost);
   Posts.insert(newPost, function(error, newPostId){
     if (error) {
       var result = {
         result: false,
         error: error
       };
+      console.log(error.toString());
       response.write(JSON.stringify(result));
     }
     else{

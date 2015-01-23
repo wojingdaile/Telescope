@@ -55,6 +55,7 @@ Meteor.startup(function () {
             this.response.end();
           }
           else{
+            console.log("result: " + result.post);
             AddPost(result.post, this.response);
           }
           break;
