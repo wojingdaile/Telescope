@@ -89,8 +89,14 @@ Meteor.startup(function () {
         }
         case "POST":{
           // post new comment to a comment
-          AddComment(this.request.body, this.response);
-
+          var result = GetCommentFromJsonString(this.request.body);
+          if(!result.res){
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
+          else{
+            AddComment(result.comment, this.response);
+          }
           break;
         }
         case "DELETE":{
@@ -109,7 +115,14 @@ Meteor.startup(function () {
     action: function(){
 
       this.response.writeHead(200, {"Content-Type": "text/json"});
-      AddPostComment(this.request.body, this.response);
+      var result = GetPostCommentFromJsonString(this.request.body);
+      if(!result.res){
+        this.response.write(JSON.stringify(result));
+        this.response.end();
+      }
+      else{
+        AddPostComment(result.comment, this.response);
+      }
     }
   });
 

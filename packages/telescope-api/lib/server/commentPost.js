@@ -1,3 +1,40 @@
+GetPostCommentFromJsonString = function(jsonString){
+
+  var providePostProperties = ['author', 'body', 'htmlBody', 'inactive', 'postId', 'userId'];
+  var defaultComment = {
+       baseScore: 0,
+       createdAt: new Date(), 
+       downvotes: 0, 
+       postedAt: new Date(), 
+       score: 0, 
+       upvoters: [],
+       upvotes: 0, 
+  };
+
+    var newComment = defaultComment;
+    var result;
+    for(i in providePostProperties){
+      
+      var property = providePostProperties[i];
+      if(jsonString[property] == undefined){
+
+          result = {
+          res: false,
+          error: "property not found: " + property
+        };
+          break;
+      }
+      else{
+          newComment[property] = jsonString[property];
+          result = {
+            res: true,
+            comment: newComment
+          };
+      }
+    }
+    return result;
+};
+
 AddPostComment= function(newComment, response){
 	Comments.insert(newComment, function(error, commentId) {
 		if (error) {
