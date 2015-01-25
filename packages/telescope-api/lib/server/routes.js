@@ -168,4 +168,48 @@ Meteor.startup(function () {
       }
     }
   });
+
+  Router.route('users', {
+    where: 'server',
+    path: '/api/user',
+    action: function() {
+      var parseId = this.request.headers['x-auth-token'];
+      if (this.request.method == 'GET') {
+        if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+
+        this.response.write(GetUser(parseId));
+        this.response.end();
+      } else if (this.request.method == 'POST') {
+        var userInfo = this.request.body;
+
+        if (userInfo == undefined || Object.keys(userInfo).length == 0) {
+          CreateUserFromParse(parseId, this.response);
+        } else {
+          CreateUser(userInfo, this.response);
+        }
+      } else if (this.request.method == 'PUT') {
+        this.response.statusCode = 400;
+        var result = JSON.stringify({
+          "error": "method not implemented."
+        })
+        this.response.write(result);
+        this.response.end();
+      } else {
+        this.response.statusCode = 400;
+        var result = JSON.stringify({
+          "error": "method not allowed."
+        })
+        this.response.write(result);
+        this.response.end();
+      }
+    }
+  });
 });
