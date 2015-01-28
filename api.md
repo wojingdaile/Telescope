@@ -5,7 +5,7 @@
 
 #Category
 
-###获取Category：**GET** [/api/category?limit=3]()
+###获取Category：**GET** [/api/categories?limit=3]()
 >limit参数为需要获取的category个数
 
 ```
@@ -15,7 +15,7 @@ json
 }
 ```
 
-###创建Category：**POST** [/api/category]()
+###~~创建Category~~：**POST** [/api/categories]()
 >POST 数据结构：
 
 ```
@@ -28,7 +28,7 @@ json
 }
 ```
 
-###删除Category： **DELETE** [/api/category?categoryId=<_id>]()
+###~~删除Category~~： **DELETE** [/api/categories?categoryId=<_id>]()
 >删除一个Category
 >><_id>：删除category的id
 
