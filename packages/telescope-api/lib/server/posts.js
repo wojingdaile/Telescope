@@ -165,3 +165,67 @@ AddPost = function(newPost, response){
     response.end();
   })
 }
+
+UpVotePost = function(postId, response){
+  //TODO: add user id to upvoters
+  Posts.update({_id: postId}, {$inc: {upvotes: 1}} , function(error, numOfDocAffected){
+    
+    var result;
+    if(error){
+      result = {
+        res: false,
+        error: error
+      };
+    }
+    else{
+      result = {
+        res: true,
+        numOfDocAffected: numOfDocAffected
+      };
+    }
+    response.write(JSON.stringify(result));
+    response.end();
+  });
+}
+
+DownVotePost = function(postId, response){
+  //TODO: add user id to upvoters
+  Posts.update({_id: postId}, {$inc: {downvotes: 1}} , function(error, numOfDocAffected){
+    
+    var result;
+    if(error){
+      result = {
+        res: false,
+        error: error
+      };
+    }
+    else{
+      result = {
+        res: true,
+        numOfDocAffected: numOfDocAffected
+      };
+    }
+    response.write(JSON.stringify(result));
+    response.end();
+  });
+}
+
+UpdatePost = function(postId, newBody, response){
+  Posts.update({_id: postId}, {body: newBody, postedAt, new Date()}, function(error, numOfFileAffected){
+    var result;
+    if(error){
+      result = {
+        res: false,
+        error: error
+      };
+    }
+    else{
+      result = {
+        res: true,
+        numOfDocAffected: numOfDocAffected
+      };
+    }
+    response.write(JSON.stringify(result));
+    response.end();
+  })
+}

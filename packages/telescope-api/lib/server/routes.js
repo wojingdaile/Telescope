@@ -55,7 +55,6 @@ Meteor.startup(function () {
             this.response.end();
           }
           else{
-            console.log("result: " + result.post);
             AddPost(result.post, this.response);
           }
           break;
@@ -63,6 +62,34 @@ Meteor.startup(function () {
         case "DELETE":{
           var deletePostId = this.params.query.postId;
           DeletePost(deletePostId, this.response);
+          break;
+        }
+        case "PUT":{
+          var action = this.params.query.action;
+          var postId = this.request.body.postId;
+          if("addPostClickCount" == action){
+            AddPostClickCount(postId, this.response)
+          }
+          else if("updatePost" == action){
+            var newBody = this.request.body.body;
+            UpdatePost(postId, newBody, this.response);
+          }
+          else if("upvote" == action){
+            UpVotePost(postId, this.response);
+
+          }
+          else if("downvote" == action){
+            DownVotePost(postId, this.response);
+          }
+          else{
+            this.response.statusCode = 400;
+            var result = {
+              result: false,
+              error: "action not support"
+            };
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
           break;
         }
       }
@@ -106,6 +133,26 @@ Meteor.startup(function () {
           DeleteComment(comment_id, this.response);
           break;
         }
+        case "PUT":{
+          var action = this.params.query.action;
+          var commentId = this.request.body.commentId;
+          if("upvote" == action){
+            UpVoteComment(commentId, this.response);
+          }
+          else if("downvote" == action){
+            DownVoteComment(commentId, this.response);
+          }
+          else{
+            this.response.statusCode = 400;
+            var result = {
+              result: false,
+              error: "action not support"
+            };
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
+          break;
+        }
       }
     }
   });
@@ -123,48 +170,6 @@ Meteor.startup(function () {
       }
       else{
         AddPostComment(result.comment, this.response);
-      }
-    }
-  });
-
-  Router.route('upvote',{
-    where: 'server',
-    path: '/api/upvote',
-    action: function(){
-
-      var type = this.request.query.type;
-      var id = this.request.query.id;
-      this.response.writeHead(200, {"Content-Type": "text/json"});
-      if("post" === type){
-        UpVotePost(id, this.response);
-      }
-      else if("comment" === type){
-        UpVoteComment(id, this.response);
-      }
-      else{
-        this.response.write("{error: params error}");
-        this.response.end();
-      }
-    }
-  });
-
-  Router.route('downvote',{
-    where: 'server',
-    path: '/api/downvote',
-    action: function(){
-
-      var type = this.request.query.type;
-      var id = this.request.query.id;
-      this.response.writeHead(200, {"Content-Type": "text/json"});
-      if("post" === type){
-        DownVotePost(id, this.response);
-      }
-      else if("comment" === type){
-        DownVoteComment(id, this.response);
-      }
-      else{
-        this.response.write("{error: params error}");
-        this.response.end();
       }
     }
   });
@@ -191,8 +196,6 @@ Meteor.startup(function () {
         var userInfo = this.request.body;
 
         if (userInfo == undefined || Object.keys(userInfo).length == 0) {
-          CreateUserFromParse(parseId, this.response);
-        } else {
           CreateUser(userInfo, this.response);
         }
       } else if (this.request.method == 'PUT') {

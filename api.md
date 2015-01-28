@@ -58,7 +58,7 @@ json
 }
 ```
 
-###创建Post：**POST** [/api/post]()
+###创建Post：**POST** [/api/posts]()
 > POST 数据结构
 
 ```
@@ -75,9 +75,46 @@ json
 }
 ```
 
-###删除Post：**DELETE** [/api/post?postId=<_id>]()
+###删除Post：**DELETE** [/api/posts?postId=<_id>]()
 > 删除帖子
 > ><_id>为需要删除帖子的id
+
+###更新Post：**PUT**
+####更新POST内容：[/api/posts?action=updatePost]()
+>PUT数据结构
+
+```
+{
+	"postId": "123",
+	"body": "new body"
+}
+```
+####增加帖子点击数：[/api/posts?action=addPostClickCount]()
+>PUT数据结构
+
+```
+{
+	"postId": "123"
+}
+```
+
+####顶帖子：[/api/posts?action=upvote]()
+>PUT数据结构
+
+```
+{
+	"postId": "123"
+}
+```
+
+####踩帖子：[/api/posts?action=downvote]()
+>PUT数据结构
+
+```
+{
+	"postId": "123"
+}
+```
 
 
 #Comments
@@ -123,6 +160,16 @@ json
 > 删除回复
 > ><_id>:需要删除的comment的id
 
+###顶踩Comment: **PUT** [/api/comments?action=(upvote|downvote)]()
+>PUT数据结构
+
+```
+{
+	"commentId": "11233"
+}
+```
+
+
 #回复post
 ###回复Post：**POST** [/api/commentPost]()
 > POST 数据结构
@@ -146,18 +193,6 @@ json
     "userId" : "AtkugG9xemuc5yKge"
 }
 ```
-
-#顶&踩
-###顶：**POST** [/api/upvote?type=(post/comment)&id=<_id>]()
-> type:顶的类型，post或者comment；
-> 
-> id：顶的post或者comment的id；
-
-###踩: **POST** [/api/downvote?type=(post/comment)&id=<_id>]()
-> type：踩的类型，post或者comment；
-
-> id: 踩的post或者comment的id；
-
 
 
 #User

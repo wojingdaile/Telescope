@@ -62,7 +62,6 @@ GetComments = function(post_id, comment_id, limit, skip){
     for(var i = 0 ; i < comments.length; i++){
       
       var comment = comments[i];
-      console.log(comment.body + ":" +comment._id);
       var insertIndex = i;
       comments.filter(function(subComment){
         return subComment.parentCommentId === comment._id
@@ -138,4 +137,49 @@ DeleteComment = function(comment_id, response){
       response.end();
     }
   }
+}
+
+
+UpVoteComment = function(commentId, response){
+  //TODO: add user id to upvoters
+  Comments.update({_id: commentId}, {$inc: {upvotes: 1}} , function(error, numOfDocAffected){
+    
+    var result;
+    if(error){
+      result = {
+        res: false,
+        error: error
+      };
+    }
+    else{
+      result = {
+        res: true,
+        numOfDocAffected: numOfDocAffected
+      };
+    }
+    response.write(JSON.stringify(result));
+    response.end();
+  });
+}
+
+DownVoteComment = function(commentId, response){
+  //TODO: add user id to upvoters
+  Comments.update({_id: commentId}, {$inc: {downvotes: 1}} , function(error, numOfDocAffected){
+    
+    var result;
+    if(error){
+      result = {
+        res: false,
+        error: error
+      };
+    }
+    else{
+      result = {
+        res: true,
+        numOfDocAffected: numOfDocAffected
+      };
+    }
+    response.write(JSON.stringify(result));
+    response.end();
+  });
 }
