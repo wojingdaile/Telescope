@@ -9,61 +9,62 @@ GetUser = function(parseId, reponse) {
   return JSON.stringify(user);
 }
 
-CreateUserFromParse = function(parseId, response) {
-  // TODO: get user info from parse
-  var result = JSON.stringify({
-    "error": "not implemented."
-  });
-
-  response.write(result);
-  response.end()
-  return;
-}
-
 CreateUser = function(userInfo, response) {
-  var username = userInfo.username;
-  var password = userInfo.password;
-  var email = userInfo.email;
 
-  if (!username || !password || !email) {
-    var result = JSON.stringify({
-      "error": "params not valid."
-    });
+  var parseId = userInfo.parseId;
+  var services = userInfo.services;
+
+  var result;
+  if (!parseId || !services) {
+     result = {
+      result: false,
+      error: "paras error."
+     };
     response.statusCode = 400;
-    response.write(result);
+    response.write(JSON.stringify(result));
     response.end()
     return;
   }
 
+  var username = userInfo.username;
+  var password = userInfo.password;
+  var email = userInfo.email;
+  
+
   // search if user exsited
-  var user = Meteor.users.findOne({username: username});
+  var user = Meteor.users.findOne({parseId: parseId});
   if (!user) {
     console.log("user not found! create now...");
 
     var userId = Accounts.createUser({username: username,
                          email: email,
-                         password: password});
+                         password: password,
+                         services: services});
 
       if (!userId) {
         response.statusCode = 500;
-        var result = JSON.stringify({
-          "error": "create user failed, sys err."
-        });
-        response.write(result);
+        result = {
+          result: false,
+          error: 'create user failed, sys err.'
+        };
+        response.write(JSON.stringify(result));
         response.end();
       } else {
-        var result = JSON.stringify({
-          "userId": userId
-        });
-        response.write(result);
+        response.statusCode = 200;
+        result = {
+          result: true,
+          userId: userId
+        };
+        response.write(JSON.stringify(result));
         response.end();
       }
   } else {
-    var result = JSON.stringify({
-      "error": "user already existed."
-    });
+    result = {
+          result: false,
+          error: 'user exsited'
+        };
     response.statusCode = 400;
-    response.write(result);
+    response.write(JSON.stringify(result));
     response.end()
   }
 }
@@ -101,3 +102,49 @@ UpdateUser = function (parseId, userInfo, response) {
     return;
   });
 }
+
+AddFacebookInfo = function(parseId, facebookInfo, response){
+
+  if(facebookInfo.accessToken == undefined){
+    var result = {
+      result: false,
+      error: "facebook info has no accessToken info."
+    };
+    response.write(result);
+    response.end();
+    return;
+  }
+  var needProperties =  [
+            "accessToken",
+            "email",
+            "expiresAt",
+            "first_name",
+            "gender",
+            "id",
+            "last_name",
+            "link",
+            "locale",
+            "name"
+        ];
+  var needInfo;
+  for(i in needProperties){
+    var property = needProperties[i];
+    info[property] = facebookInfo[property];
+  }
+  
+  var ueser = Meteor.users.findOne({parseId: parseId});
+  if(!user){
+    var result = {
+      result: false,
+      error: "user not found"
+    };
+    response.write(result);
+    response.end();
+    return;
+  }
+  var services = user.services;
+  user['services']['facebook'] = needInfo;
+  UpdateUser(parseId, user, response);
+}
+
+

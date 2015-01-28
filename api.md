@@ -161,4 +161,50 @@ json
 
 
 #User
-TODO: 整合ParseUser
+###创建User：**POST**[/api/user]()
+>POST数据结构
+
+```
+{
+    "services" : {
+        "facebook" : {
+            "accessToken" : "xxxx",
+            "email" : "xkkccc@126.com",
+            "expiresAt" : 1427529364531,
+            "first_name" : "John",
+            "gender" : "female",
+            "id" : "1524970277786102",
+            "last_name" : "Smith",
+            "link" : "https://www.facebook.com/app_scoped_user_id/1524970277786102/",
+            "locale" : "en_US",
+            "name" : "John Smith"
+        }
+    },
+    "username" : "kangcheng",
+    "profile" : {
+        "email" : "dev@pinssible.com",
+        "name" : "FancyKey"
+    }
+}
+```
+
+```
+{
+    "services" : {
+       "twitter" : {
+            "id" : "2834622025",
+            "screenName" : "FancyKey",
+            "accessToken" : "2834622025-rrSEn8t4DaFf3aZIMpVnMmhxDU1BAa5TIFhRRrm",
+            "accessTokenSecret" : "cLPzbbxaAbnR3XBmKrsRZiDXouQVQGpMGnbpcofqXATKk",
+            "profile_image_url" : "http://pbs.twimg.com/profile_images/516067919583662080/9L64SGqm_normal.jpeg",
+            "profile_image_url_https" : "https://pbs.twimg.com/profile_images/516067919583662080/9L64SGqm_normal.jpeg",
+            "lang" : "en"
+        }
+    },
+    "username" : "kangcheng",
+    "profile" : {
+        "email" : "dev@pinssible.com",
+        "name" : "FancyKey"
+    }
+}
+```
