@@ -35,6 +35,17 @@ GetCommentFromJsonString = function(jsonString){
     return result;
 };
 
+Array.prototype.move = function (old_index, new_index) {
+
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; 
+};
 
 GetComments = function(post_id, comment_id, limit, skip){
 
@@ -44,29 +55,25 @@ GetComments = function(post_id, comment_id, limit, skip){
 
 	if(post_id){
 
-		Comments.find({postId: post_id}, {sort: {postedAt: -1}, limit: 50}).forEach(function(comment) {
-            
-            comments.push(comment);
-          });
+		Comments.find({postId: post_id}, {sort: {postedAt: 1}, limit: limit}).forEach(function(comment) {
+      comments.push(comment);
+    });
 
-          var commentsToDelete = [];
-
-          comments.forEach(function(comment, index) {
-            if (comment.parentCommentId) {
-              var parent = comments.filter(function(obj) {
-                return obj._id === comment.parentCommentId;
-              })[0];
-              if (parent) {
-                parent.replies = parent.replies || [];
-                parent.replies.push(JSON.parse(JSON.stringify(comment)));
-                commentsToDelete.push(index)
-              }
-            }
-          });
-
-          commentsToDelete.reverse().forEach(function(index) {
-            comments.splice(index,1);
-          });
+    for(var i = 0 ; i < comments.length; i++){
+      
+      var comment = comments[i];
+      console.log(comment.body + ":" +comment._id);
+      var insertIndex = i;
+      comments.filter(function(subComment){
+        return subComment.parentCommentId === comment._id
+      }).forEach(function(subComment){
+        insertIndex++;
+        var subIndex = comments.indexOf(subComment);
+        if(subIndex != insertIndex){
+          comments.move(subIndex, insertIndex);
+        }
+      });
+    }
 	}
   var res = {
     comments: comments
