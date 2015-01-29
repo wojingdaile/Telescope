@@ -9,6 +9,7 @@ GetPostCommentFromJsonString = function(jsonString){
        score: 0, 
        upvoters: [],
        upvotes: 0, 
+       level: 1
   };
 
     var newComment = defaultComment;
@@ -36,6 +37,7 @@ GetPostCommentFromJsonString = function(jsonString){
 };
 
 AddPostComment= function(newComment, response){
+
 	Comments.insert(newComment, function(error, commentId) {
 		if (error) {
 			var res = {

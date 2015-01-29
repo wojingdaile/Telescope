@@ -12,29 +12,36 @@ GetPostFromJsonString = function(jsonString){
        score: 0, 
        upvoters: [],
        upvotes: 0, 
-       viewCount: 0
+       viewCount: 0,
   };
 
     var newPost = defaultPost;
-    var result;
+    var res = true;
+    var missingProperty;
     for(i in providePostProperties){
       
       var property = providePostProperties[i];
       if(jsonString[property] == undefined){
-
-          result = {
-          result: false,
-          error: "property not found: " + property
-        };
+          missingProperty = property;
+          res = false;
           break;
       }
       else{
           newPost[property] = jsonString[property];
-          result = {
-            result: true,
-            post: newPost
-          };
       }
+    }
+    var result;
+    if(!res){
+      result = {
+        result: false,
+        error: "property not found: " + missingProperty
+      };
+    }
+    else{
+      result = {
+        result: true,
+        post: newPost
+      };
     }
     return result;
 }

@@ -1,5 +1,22 @@
 GetCommentFromJsonString = function(jsonString){
 
+  var parentId = jsonString["parentCommentId"];
+  if (!parentId) {
+    result = {
+      result: false,
+      error: "property not found: parentCommentId"
+    };
+    return result;
+  }
+  var parentComment = Comments.findOne({_id: parentId});
+  if (!parentComment) {
+    result = {
+      result: false,
+      error: "NO parent comment found"
+    };
+    return result;
+  };
+  var parentLevel = parentComment.level;
   var providePostProperties = ['author', 'body', 'htmlBody', 'inactive', 'postId', 'userId', 'parentCommentId'];
   var defaultComment = {
        baseScore: 0,
@@ -9,30 +26,38 @@ GetCommentFromJsonString = function(jsonString){
        score: 0, 
        upvoters: [],
        upvotes: 0, 
+       level: 1 + parentLevel
   };
 
-    var newComment = defaultComment;
-    var result;
-    for(i in providePostProperties){
-      
-      var property = providePostProperties[i];
-      if(jsonString[property] == undefined){
-
-          result = {
-          result: false,
-          error: "property not found: " + property
-        };
-          break;
-      }
-      else{
-          newComment[property] = jsonString[property];
-          result = {
-            result: true,
-            comment: newComment
-          };
-      }
+  var newComment = defaultComment;
+  var res = true;
+  var missingProperty;
+  for(i in providePostProperties){
+    
+    var property = providePostProperties[i];
+    if(jsonString[property] == undefined){
+        missingProperty =property;
+        result = false;
+        break;
     }
-    return result;
+    else{
+        newComment[property] = jsonString[property];
+    }
+  }
+  var result;
+  if(!res){
+    result = {
+      result: false,
+      error: "property not found: " + missingProperty
+    };
+  }
+  else{
+    result = {
+      result: true,
+      comment: newComment
+    };
+  }
+  return result;
 };
 
 Array.prototype.move = function (old_index, new_index) {
