@@ -189,7 +189,7 @@ UpVoteComment = function(commentId, userId, response){
     return;
   }
 
-  Comments.update({_id: commentId}, {$inc: {upvotes: 1}, {$push: {upvoters: userId}}} , function(error, numOfDocAffected){
+  Comments.update({_id: commentId}, {$inc: {upvotes: 1}, $push: {upvoters: userId}}, function(error, numOfDocAffected){
     
     var result;
     if(error){
