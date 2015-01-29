@@ -23,7 +23,7 @@ GetPostFromJsonString = function(jsonString){
       if(jsonString[property] == undefined){
 
           result = {
-          res: false,
+          result: false,
           error: "property not found: " + property
         };
           break;
@@ -31,7 +31,7 @@ GetPostFromJsonString = function(jsonString){
       else{
           newPost[property] = jsonString[property];
           result = {
-            res: true,
+            result: true,
             post: newPost
           };
       }
@@ -145,14 +145,23 @@ DeletePost = function(deletePostId, response){
 
 AddPost = function(newPost, response){
 
-  console.log(newPost);
+  var userId = newPost.userId;
+  if(!userId){
+    var result = {
+        result: false,
+        error: "new post must has userId"
+      };
+      response.write(JSON.stringify(result));
+      response.end();
+      return;
+  }
+
   Posts.insert(newPost, function(error, newPostId){
     if (error) {
       var result = {
         result: false,
         error: error
       };
-      console.log(error.toString());
       response.write(JSON.stringify(result));
     }
     else{
@@ -160,26 +169,37 @@ AddPost = function(newPost, response){
         result: true,
         postId: newPostId
       };
+      AddPostCount(userId);
       response.write(JSON.stringify(result));
     }
     response.end();
   })
 }
 
-UpVotePost = function(postId, response){
+UpVotePost = function(postId, userId, response){
   //TODO: add user id to upvoters
-  Posts.update({_id: postId}, {$inc: {upvotes: 1}} , function(error, numOfDocAffected){
+  if(!postId || !userId){
+    result = {
+        result: false,
+        error: "params error"
+      };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+
+  Posts.update({_id: postId}, {$inc: {upvotes: 1}, $push: {upvoters: userId}} , function(error, numOfDocAffected){
     
     var result;
     if(error){
       result = {
-        res: false,
+        result: false,
         error: error
       };
     }
     else{
       result = {
-        res: true,
+        result: true,
         numOfDocAffected: numOfDocAffected
       };
     }
@@ -188,20 +208,30 @@ UpVotePost = function(postId, response){
   });
 }
 
-DownVotePost = function(postId, response){
-  //TODO: add user id to upvoters
+DownVotePost = function(postId, userId, response){
+
+  if(!postId || !userId){
+    result = {
+        result: false,
+        error: "params error"
+      };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+
   Posts.update({_id: postId}, {$inc: {downvotes: 1}} , function(error, numOfDocAffected){
     
     var result;
     if(error){
       result = {
-        res: false,
+        result: false,
         error: error
       };
     }
     else{
       result = {
-        res: true,
+        result: true,
         numOfDocAffected: numOfDocAffected
       };
     }
@@ -211,17 +241,17 @@ DownVotePost = function(postId, response){
 }
 
 UpdatePost = function(postId, newBody, response){
-  Posts.update({_id: postId}, {body: newBody, postedAt, new Date()}, function(error, numOfFileAffected){
+  Posts.update({_id: postId}, {body: newBody, postedAt: new Date()}, function(error, numOfFileAffected){
     var result;
     if(error){
       result = {
-        res: false,
+        result: false,
         error: error
       };
     }
     else{
       result = {
-        res: true,
+        result: true,
         numOfDocAffected: numOfDocAffected
       };
     }

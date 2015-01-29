@@ -147,4 +147,22 @@ AddFacebookInfo = function(parseId, facebookInfo, response){
   UpdateUser(parseId, user, response);
 }
 
+AddCommentCount = function(userId){
+
+  Meteor.users.update({_id: userId}, {$inc: {commentCount: 1}}, function(error, numOfFileAffected){
+    if(error){
+      console.log("AddCommentCount error: "+ error);
+    }
+  });
+}
+
+AddPostCount = function(userId){
+
+  Meteor.users.update({_id: userId}, {$inc: {postCount: 1}}, function(error, numOfFileAffected){
+    if(error){
+      console.log("AddPostCount error: "+ error);
+    }
+  });
+}
+
 

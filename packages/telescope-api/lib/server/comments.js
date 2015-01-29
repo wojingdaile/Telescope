@@ -19,7 +19,7 @@ GetCommentFromJsonString = function(jsonString){
       if(jsonString[property] == undefined){
 
           result = {
-          res: false,
+          result: false,
           error: "property not found: " + property
         };
           break;
@@ -27,7 +27,7 @@ GetCommentFromJsonString = function(jsonString){
       else{
           newComment[property] = jsonString[property];
           result = {
-            res: true,
+            result: true,
             comment: newComment
           };
       }
@@ -83,6 +83,17 @@ GetComments = function(post_id, comment_id, limit, skip){
 
 AddComment = function(newComment, response){
 
+  var userId = newComment.userId;
+  if(!userId){
+    var result = {
+        result: false,
+        error: "comment must has a userId"
+      };
+      response.write(JSON.stringify(result));
+      response.end();
+      return;
+  }
+
   Comments.insert(newComment, function(error, commentId){
 
     if (error) {
@@ -97,6 +108,7 @@ AddComment = function(newComment, response){
         result: true,
         commentId: commentId
       };
+      AddCommentCount(userId);
       response.write(JSON.stringify(result));
     }
     response.end();
@@ -140,20 +152,30 @@ DeleteComment = function(comment_id, response){
 }
 
 
-UpVoteComment = function(commentId, response){
-  //TODO: add user id to upvoters
-  Comments.update({_id: commentId}, {$inc: {upvotes: 1}} , function(error, numOfDocAffected){
+UpVoteComment = function(commentId, userId, response){
+
+  if(!commentId || !userId){
+    result = {
+        result: false,
+        error: "params error"
+      };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+
+  Comments.update({_id: commentId}, {$inc: {upvotes: 1}, {$push: {upvoters: userId}}} , function(error, numOfDocAffected){
     
     var result;
     if(error){
       result = {
-        res: false,
+        result: false,
         error: error
       };
     }
     else{
       result = {
-        res: true,
+        result: true,
         numOfDocAffected: numOfDocAffected
       };
     }
@@ -162,20 +184,30 @@ UpVoteComment = function(commentId, response){
   });
 }
 
-DownVoteComment = function(commentId, response){
-  //TODO: add user id to upvoters
+DownVoteComment = function(commentId, userId, response){
+
+  if(!commentId || !userId){
+    result = {
+        result: false,
+        error: "params error"
+      };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+
   Comments.update({_id: commentId}, {$inc: {downvotes: 1}} , function(error, numOfDocAffected){
     
     var result;
     if(error){
       result = {
-        res: false,
+        result: false,
         error: error
       };
     }
     else{
       result = {
-        res: true,
+        result: true,
         numOfDocAffected: numOfDocAffected
       };
     }
