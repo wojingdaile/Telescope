@@ -19,7 +19,7 @@ GetPostCommentFromJsonString = function(jsonString){
       if(jsonString[property] == undefined){
 
           result = {
-          res: false,
+          result: false,
           error: "property not found: " + property
         };
           break;
@@ -27,7 +27,7 @@ GetPostCommentFromJsonString = function(jsonString){
       else{
           newComment[property] = jsonString[property];
           result = {
-            res: true,
+            result: true,
             comment: newComment
           };
       }

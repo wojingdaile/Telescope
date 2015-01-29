@@ -50,7 +50,7 @@ Meteor.startup(function () {
         }
         case "POST":{
           var result = GetPostFromJsonString(this.request.body);
-          if(!result.res){
+          if(!result.result){
             this.response.write(JSON.stringify(result));
             this.response.end();
           }
@@ -119,7 +119,7 @@ Meteor.startup(function () {
         case "POST":{
           // post new comment to a comment
           var result = GetCommentFromJsonString(this.request.body);
-          if(!result.res){
+          if(!result.result){
             this.response.write(JSON.stringify(result));
             this.response.end();
           }
@@ -167,7 +167,7 @@ Meteor.startup(function () {
 
       this.response.writeHead(200, {"Content-Type": "text/json"});
       var result = GetPostCommentFromJsonString(this.request.body);
-      if(!result.res){
+      if(!result.result){
         this.response.write(JSON.stringify(result));
         this.response.end();
       }
