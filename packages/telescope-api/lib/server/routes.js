@@ -1,3 +1,25 @@
+Array.prototype.move = function (old_index, new_index) {
+
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; 
+};
+
+Array.prototype.contains = function(object){
+
+  for (var i = 0; i < this.length; i++) {
+        if (this[i] === object) {
+            return true;
+        }
+    }
+    return false;
+}
+
 Meteor.startup(function () {
 
   Router.route('categories', {
@@ -37,18 +59,31 @@ Meteor.startup(function () {
     action: function() {
 
       var method = this.request.method;
+      var parseId = this.request.headers['x-auth-token'];
       this.response.writeHead(200, {"Content-Type": "text/json"});
       switch(method){
         case "GET":{
+          if(parseId == undefined){
+            parseId = "";
+          }
           var category = this.params.query.category;
           var limit = parseInt(this.params.query.limit);
           var skip = parseInt(this.params.query.skip);
 
-          this.response.write(GetCategoryPosts(category, limit, skip));
+          this.response.write(GetCategoryPosts(category, parseId, limit, skip));
           this.response.end();
           break;
         }
         case "POST":{
+          if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
           var result = GetPostFromJsonString(this.request.body);
           if(!result.result){
             this.response.write(JSON.stringify(result));
@@ -60,11 +95,35 @@ Meteor.startup(function () {
           break;
         }
         case "DELETE":{
+
+          var parseId = this.request.headers['x-auth-token'];
+          if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+
           var deletePostId = this.params.query.postId;
           DeletePost(deletePostId, this.response);
           break;
         }
         case "PUT":{
+
+          var parseId = this.request.headers['x-auth-token'];
+          if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+
           var action = this.params.query.action;
           var postId = this.request.body.postId;
           if("addPostClickCount" == action){
@@ -109,15 +168,25 @@ Meteor.startup(function () {
         case "GET":{
           // get comments
           var post_id = this.params.query.postId;
-          var comment_id = this.params.query.commentId;
           var limit = parseInt(this.params.query.limit);
           var skip = parseInt(this.params.query.skip);
-          this.response.write(GetComments(post_id, comment_id, limit, skip));
+          this.response.write(GetComments(post_id, limit, skip));
           this.response.end();
           break;
         }
         case "POST":{
           // post new comment to a comment
+          var parseId = this.request.headers['x-auth-token'];
+          if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+
           var result = GetCommentFromJsonString(this.request.body);
           if(!result.result){
             this.response.write(JSON.stringify(result));
@@ -130,11 +199,35 @@ Meteor.startup(function () {
         }
         case "DELETE":{
           // delete comment
+
+          var parseId = this.request.headers['x-auth-token'];
+          if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+
           var comment_id = this.params.query.commentId;
           DeleteComment(comment_id, this.response);
           break;
         }
         case "PUT":{
+
+          var parseId = this.request.headers['x-auth-token'];
+          if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+
           var action = this.params.query.action;
           var commentId = this.request.body.commentId;
           if("upvote" == action){
@@ -164,6 +257,17 @@ Meteor.startup(function () {
     where: 'server',
     path: '/api/commentPost',
     action: function(){
+
+      var parseId = this.request.headers['x-auth-token'];
+          if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
 
       this.response.writeHead(200, {"Content-Type": "text/json"});
       var result = GetPostCommentFromJsonString(this.request.body);
@@ -197,8 +301,7 @@ Meteor.startup(function () {
         this.response.end();
       } else if (this.request.method == 'POST') {
         var userInfo = this.request.body;
-
-        if (userInfo == undefined || Object.keys(userInfo).length == 0) {
+        if (!userInfo == undefined || !Object.keys(userInfo).length == 0) {
           CreateUser(userInfo, this.response);
         }
       } else if (this.request.method == 'PUT') {

@@ -13,7 +13,6 @@ CreateUser = function(userInfo, response) {
 
   var parseId = userInfo.parseId;
   var services = userInfo.services;
-
   var result;
   if (!parseId || !services) {
      result = {
@@ -27,20 +26,26 @@ CreateUser = function(userInfo, response) {
   }
 
   var username = userInfo.username;
-  var password = userInfo.password;
   var email = userInfo.email;
   
-
+  console.log(username + " " + email);
   // search if user exsited
   var user = Meteor.users.findOne({parseId: parseId});
   if (!user) {
-    console.log("user not found! create now...");
-
-    var userId = Accounts.createUser({username: username,
-                         email: email,
-                         password: password,
-                         services: services});
-
+    try{
+      var userId = Accounts.createUser({username: username,
+                         email: email});
+    }
+    catch(error){
+      response.statusCode = error.error;
+      result = {
+          result: false,
+          error: error.reason
+        };
+        response.write(JSON.stringify(result));
+        response.end();
+    }
+    
       if (!userId) {
         response.statusCode = 500;
         result = {
@@ -50,13 +55,26 @@ CreateUser = function(userInfo, response) {
         response.write(JSON.stringify(result));
         response.end();
       } else {
-        response.statusCode = 200;
-        result = {
-          result: true,
-          userId: userId
+        Meteor.users.update({_id: userId},{$set:{services: services, parseId: parseId}}, function(error, numOfFileAffected){
+          if(error){
+          response.statusCode = 500;
+          result = {
+          result: false,
+          error: error
         };
         response.write(JSON.stringify(result));
         response.end();
+          }
+          else{
+            response.statusCode = 200;
+            result = {
+            result: true,
+            userId: userId
+          };
+          response.write(JSON.stringify(result));
+          response.end();
+          }
+        });
       }
   } else {
     result = {

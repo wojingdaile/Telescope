@@ -47,7 +47,7 @@ GetPostFromJsonString = function(jsonString){
     return result;
 }
 
-GetCategoryPosts = function(categorySegment, limitSegment, skip){
+GetCategoryPosts = function(categorySegment, parseId, limitSegment, skip){
   var posts = [];
   var category = typeof limitSegment === 'undefined' ? 'top' : categorySegment;
   var limit = typeof limitSegment === 'undefined' ? 20 : limitSegment // default limit: 20 posts
@@ -56,13 +56,21 @@ GetCategoryPosts = function(categorySegment, limitSegment, skip){
   Posts.find({categories: [category], status: STATUS_APPROVED}).forEach(function(post) {
 
     var url = getPostLink(post);
+    var hasUpvote = false;
+    if(parseId.length > 0){
+      if(post.upvoters.contains(parseId)){
+        hasUpvote = true;
+      }
+    }
     var properties = {
       title: post.title,
       headline: post.title, // for backwards compatibility
       author: post.author,
       date: post.postedAt,
       url: url,
-      guid: post._id
+      guid: post._id,
+      upvotes:post.upvoters.length,
+      upvoted: hasUpvote
     };
 
     if(post.body)

@@ -8,6 +8,7 @@
 ###获取Category：**GET** [/api/categories?limit=3]()
 >limit参数为需要获取的category个数
 
+
 ```
 json
 {
@@ -201,6 +202,7 @@ json
 
 ```
 {
+    "parseId": "xxxx",
     "services" : {
         "facebook" : {
             "accessToken" : "xxxx",
@@ -216,15 +218,14 @@ json
         }
     },
     "username" : "kangcheng",
-    "profile" : {
-        "email" : "dev@pinssible.com",
-        "name" : "FancyKey"
-    }
+    "email" : "dev@pinssible.com",
+    "name" : "FancyKey"
 }
 ```
 
 ```
 {
+    "parseId": "xxxx",
     "services" : {
        "twitter" : {
             "id" : "2834622025",
@@ -237,9 +238,7 @@ json
         }
     },
     "username" : "kangcheng",
-    "profile" : {
-        "email" : "dev@pinssible.com",
-        "name" : "FancyKey"
-    }
+    "email" : "dev@pinssible.com",
+    "name" : "FancyKey"
 }
 ```

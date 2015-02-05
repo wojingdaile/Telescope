@@ -60,19 +60,7 @@ GetCommentFromJsonString = function(jsonString){
   return result;
 };
 
-Array.prototype.move = function (old_index, new_index) {
-
-    if (new_index >= this.length) {
-        var k = new_index - this.length;
-        while ((k--) + 1) {
-            this.push(undefined);
-        }
-    }
-    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this; 
-};
-
-GetComments = function(post_id, comment_id, limit, skip){
+GetComments = function(post_id, parseId, limit, skip){
 
 	var comments = [];
 	limit = typeof limit === 'undefined' ? 20 : limit;
@@ -81,6 +69,8 @@ GetComments = function(post_id, comment_id, limit, skip){
 	if(post_id){
 
 		Comments.find({postId: post_id}, {sort: {postedAt: 1}, limit: limit}).forEach(function(comment) {
+      comment["upvoted"] = comment.upvoters.contains(parseId)
+      delete comment.upvoters;
       comments.push(comment);
     });
 
