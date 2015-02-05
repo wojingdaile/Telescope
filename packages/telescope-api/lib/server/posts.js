@@ -1,5 +1,6 @@
 GetPostFromJsonString = function(jsonString){
 
+  console.log("get post from json string: " + jsonString);
   var providePostProperties = ['author', 'body', 'categories', 'htmlBody', 'inactive', 'status', 'sticky', 'title', 'userId'];
   var defaultPost = {
        baseScore: 0,
@@ -12,24 +13,24 @@ GetPostFromJsonString = function(jsonString){
        score: 0, 
        upvoters: [],
        upvotes: 0, 
-       viewCount: 0,
+       viewCount: 0
   };
 
     var newPost = defaultPost;
     var res = true;
     var missingProperty;
-    for(i in providePostProperties){
-      
-      var property = providePostProperties[i];
+    providePostProperties.forEach(function(property){
+
       if(jsonString[property] == undefined){
           missingProperty = property;
           res = false;
-          break;
+          return;
       }
       else{
           newPost[property] = jsonString[property];
       }
-    }
+    });
+
     var result;
     if(!res){
       result = {
@@ -152,6 +153,7 @@ DeletePost = function(deletePostId, response){
 
 AddPost = function(newPost, response){
 
+  console.log("add new post:" + newPost);
   var userId = newPost.userId;
   if(!userId){
     var result = {
