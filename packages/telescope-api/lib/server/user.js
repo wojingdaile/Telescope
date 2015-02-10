@@ -1,4 +1,3 @@
-// Parse.initialize("cJqO34Np8QgRdTanEjWRUjtjk9XiLRijAhVAVWsh", "OpOAgB5SVn2q7ulxz29rcxjOBeMeKuVQVrJsJWZz");
 
 GetUser = function(parseId, reponse) {
   var user = Meteor.users.findOne({parseId: parseId})
@@ -27,7 +26,7 @@ CreateUser = function(userInfo, response) {
 
   var username = userInfo.username;
   var email = userInfo.email;
-  
+
   console.log(username + " " + email);
   // search if user exsited
   var user = Meteor.users.findOne({parseId: parseId});
@@ -45,7 +44,7 @@ CreateUser = function(userInfo, response) {
         response.write(JSON.stringify(result));
         response.end();
     }
-    
+
       if (!userId) {
         response.statusCode = 500;
         result = {
@@ -149,7 +148,7 @@ AddFacebookInfo = function(parseId, facebookInfo, response){
     var property = needProperties[i];
     info[property] = facebookInfo[property];
   }
-  
+
   var ueser = Meteor.users.findOne({parseId: parseId});
   if(!user){
     var result = {
@@ -182,5 +181,3 @@ AddPostCount = function(userId){
     }
   });
 }
-
-

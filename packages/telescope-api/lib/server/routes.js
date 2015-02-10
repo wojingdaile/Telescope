@@ -7,7 +7,7 @@ Array.prototype.move = function (old_index, new_index) {
         }
     }
     this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this; 
+    return this;
 };
 
 Array.prototype.contains = function(object){
@@ -160,7 +160,7 @@ Meteor.startup(function () {
     where: 'server',
     path: '/api/comments/',
     action: function(){
-      
+
       var method = this.request.method;
       this.response.writeHead(200, {"Content-Type": "text/json"});
       switch(method){
@@ -319,6 +319,22 @@ Meteor.startup(function () {
         this.response.write(result);
         this.response.end();
       }
+    }
+  });
+
+  Router.route('search', {
+    where: 'server',
+    path: '/api/search',
+    action: function() {
+      var limit = this.params.query.limit || 100;
+      var q = this.params.query.q || '';
+
+      var limit = parseInt(limit);
+      var q = this.params.query.q;
+
+      var result = SearchPost(limit, q);
+      this.response.write(JSON.stringify(result));
+      this.response.end();
     }
   });
 });
