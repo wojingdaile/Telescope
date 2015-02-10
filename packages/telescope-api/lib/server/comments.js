@@ -70,6 +70,9 @@ GetComments = function(post_id, parseId, limit, skip){
 
 		Comments.find({postId: post_id}, {sort: {postedAt: 1}, limit: limit}).forEach(function(comment) {
       comment["upvoted"] = comment.upvoters.contains(parseId)
+      if(comment["level"] == undefined){
+        comment["level"] = 1;
+      }
       delete comment.upvoters;
       comments.push(comment);
     });

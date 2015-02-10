@@ -166,7 +166,7 @@ Meteor.startup(function () {
       switch(method){
 
         case "GET":{
-          // get comments
+
           var post_id = this.params.query.postId;
           var limit = parseInt(this.params.query.limit);
           var skip = parseInt(this.params.query.skip);
