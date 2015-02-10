@@ -337,4 +337,13 @@ Meteor.startup(function () {
       this.response.end();
     }
   });
+
+  Router.route('healthy', {
+    where: 'server',
+    path: '/api/healthy',
+    action: function() {
+      this.response.write("");
+      this.response.end();
+    }
+  });
 });
