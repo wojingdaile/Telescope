@@ -219,7 +219,7 @@ json
     },
     "username" : "kangcheng",
     "email" : "dev@pinssible.com",
-    "name" : "FancyKey"
+    "avatar" : "http://"
 }
 ```
 
@@ -239,6 +239,6 @@ json
     },
     "username" : "kangcheng",
     "email" : "dev@pinssible.com",
-    "name" : "FancyKey"
+    "avatar" : "http://"
 }
 ```

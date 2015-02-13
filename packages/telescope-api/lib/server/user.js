@@ -25,15 +25,13 @@ CreateUser = function(userInfo, response) {
   }
 
   var username = userInfo.username;
-  var email = userInfo.email;
+  // var email = userInfo.email;
 
-  console.log(username + " " + email);
   // search if user exsited
   var user = Meteor.users.findOne({parseId: parseId});
-  if (!user) {
+  if (user == undefined) {;
     try{
-      var userId = Accounts.createUser({username: username,
-                         email: email});
+      var userId = Accounts.createUser({username: username});
     }
     catch(error){
       response.statusCode = error.error;

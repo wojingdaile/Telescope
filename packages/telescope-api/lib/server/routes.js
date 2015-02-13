@@ -286,6 +286,7 @@ Meteor.startup(function () {
     path: '/api/user',
     action: function() {
       var parseId = this.request.headers['x-auth-token'];
+      this.response.writeHead(200, {"Content-Type": "text/json"});
       if (this.request.method == 'GET') {
         if (parseId == undefined) {
           this.response.statusCode = 400;
