@@ -112,18 +112,16 @@ Meteor.startup(function () {
           break;
         }
         case "PUT":{
-
           var parseId = this.request.headers['x-auth-token'];
           if (parseId == undefined) {
-          this.response.statusCode = 400;
-          var result = JSON.stringify({
-            "error": "X-Auth-Token invalid."
-          })
-          this.response.write(result);
-          this.response.end();
-          return;
+              this.response.statusCode = 400;
+              var result = JSON.stringify({
+                "error": "X-Auth-Token invalid."
+              });
+              this.response.write(result);
+              this.response.end();
+              return;
         }
-
           var action = this.params.query.action;
           var postId = this.request.body.postId;
           if("addPostClickCount" == action){
@@ -151,8 +149,8 @@ Meteor.startup(function () {
             this.response.end();
           }
           break;
-        }
       }
+    }
     }
   });
 

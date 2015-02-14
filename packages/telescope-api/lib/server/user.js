@@ -74,9 +74,10 @@ CreateUser = function(userInfo, response) {
         });
       }
   } else {
+    console.log(" user exist:"+ user._id);
     result = {
-          result: false,
-          error: 'user exsited'
+          result: true,
+          userId: user._id
         };
     response.statusCode = 400;
     response.write(JSON.stringify(result));

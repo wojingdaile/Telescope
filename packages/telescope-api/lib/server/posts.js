@@ -1,7 +1,7 @@
 GetPostFromJsonString = function(jsonString) {
 
-  console.log("get post from json string: " + jsonString);
-  var providePostProperties = ['author', 'body', 'categories', 'htmlBody', 'inactive', 'status', 'sticky', 'title', 'userId'];
+  console.log("get post from json string: " + JSON.stringify(jsonString));
+  var providePostProperties = ['author', 'body', 'htmlBody', , 'categories', 'status', 'title', 'userId'];
   var defaultPost = {
     baseScore: 0,
     clickCount: 0,
@@ -13,7 +13,9 @@ GetPostFromJsonString = function(jsonString) {
     score: 0,
     upvoters: [],
     upvotes: 0,
-    viewCount: 0
+    viewCount: 0,
+    inactive: true,
+    sticky: false
   };
 
   var newPost = defaultPost;
@@ -21,14 +23,32 @@ GetPostFromJsonString = function(jsonString) {
   var missingProperty;
   providePostProperties.forEach(function(property) {
 
-    if (jsonString[property] == undefined) {
-      missingProperty = property;
-      res = false;
-      return;
+    if (property == "categories") {
+      newPost["categories"] = [jsonString["categories"]];
     } else {
-      newPost[property] = jsonString[property];
+      if (jsonString[property] == undefined) {
+        missingProperty = property;
+        res = false;
+        return;
+      } else {
+        newPost[property] = jsonString[property];
+      }
     }
+
   });
+
+  var result;
+  if (!res) {
+    result = {
+      result: false,
+      error: "property not found: " + missingProperty
+    };
+  } else {
+    result = {
+      result: true,
+      post: newPost
+    };
+  }
 
   var result;
   if (!res) {
@@ -79,12 +99,49 @@ GetCategoryPosts = function(categorySegment, parseId, limitSegment, skip) {
     if (post.body)
       properties.body = post.body;
 
+
     if (post.url)
       properties.domain = getDomain(url);
+    // console.log("get twitter " + post.userId);
+    // if(twitterName = getTwitterNameById(post.userId))
+    //   console.log("get twitter " + twitterName);
+    //   properties.twitterName = twitterName;
 
-    if (twitterName = getTwitterNameById(post.userId))
-      properties.twitterName = twitterName;
-      
+    /*
+    var comments = [];
+
+    Comments.find({postId: post._id}, {sort: {postedAt: -1}, limit: 50}).forEach(function(comment) {
+      var commentProperties = {
+        body: comment.body,
+        author: comment.author,
+        date: comment.postedAt,
+        guid: comment._id,
+        parentCommentId: comment.parentCommentId
+      };
+      comments.push(commentProperties);
+    });
+
+    var commentsToDelete = [];
+
+    comments.forEach(function(comment, index) {
+      if (comment.parentCommentId) {
+        var parent = comments.filter(function(obj) {
+          return obj.guid === comment.parentCommentId;
+        })[0];
+        if (parent) {
+          parent.replies = parent.replies || [];
+          parent.replies.push(JSON.parse(JSON.stringify(comment)));
+          commentsToDelete.push(index)
+        }
+      }
+    });
+
+    commentsToDelete.reverse().forEach(function(index) {
+      comments.splice(index,1);
+    });
+
+    properties.comments = comments;
+    */
     posts.push(properties);
   });
   var res = {
@@ -141,11 +198,13 @@ AddPost = function(newPost, response) {
     return;
   }
 
+  console.log("insert new post: " + JSON.stringify(newPost));
   Posts.insert(newPost, function(error, newPostId) {
     if (error) {
+      console.log("inset error: " + error);
       var result = {
         result: false,
-        error: error
+        error: error.reason
       };
       response.write(JSON.stringify(result));
     } else {
@@ -153,6 +212,7 @@ AddPost = function(newPost, response) {
         result: true,
         postId: newPostId
       };
+      console.log("insert done");
       AddPostCount(userId);
       response.write(JSON.stringify(result));
     }
@@ -161,7 +221,8 @@ AddPost = function(newPost, response) {
 }
 
 UpVotePost = function(postId, userId, response) {
-  //TODO: add user id to upvoters
+
+  console.log("upvote post:" + postId + " :" + userId);
   if (!postId || !userId) {
     result = {
       result: false,
