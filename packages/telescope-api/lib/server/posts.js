@@ -1,7 +1,7 @@
 GetPostFromJsonString = function(jsonString){
 
-  console.log("get post from json string: " + jsonString);
-  var providePostProperties = ['author', 'body', 'categories', 'htmlBody', 'inactive', 'status', 'sticky', 'title', 'userId'];
+  console.log("get post from json string: " + JSON.stringify(jsonString));
+  var providePostProperties = ['author', 'body',  'htmlBody', ,'categories' ,'status', 'title', 'userId'];
   var defaultPost = {
        baseScore: 0,
        clickCount: 0, 
@@ -13,15 +13,21 @@ GetPostFromJsonString = function(jsonString){
        score: 0, 
        upvoters: [],
        upvotes: 0, 
-       viewCount: 0
+       viewCount: 0,
+       inactive: true,
+       sticky: false
   };
 
     var newPost = defaultPost;
     var res = true;
     var missingProperty;
     providePostProperties.forEach(function(property){
-
-      if(jsonString[property] == undefined){
+      
+      if(property == "categories"){
+          newPost["categories"] = [jsonString["categories"]];
+      }
+      else{
+        if(jsonString[property] == undefined){
           missingProperty = property;
           res = false;
           return;
@@ -29,6 +35,8 @@ GetPostFromJsonString = function(jsonString){
       else{
           newPost[property] = jsonString[property];
       }
+      }
+
     });
 
     var result;
@@ -80,9 +88,10 @@ GetCategoryPosts = function(categorySegment, parseId, limitSegment, skip){
 
       if(post.url)
         properties.domain = getDomain(url);
-
-        if(twitterName = getTwitterNameById(post.userId))
-          properties.twitterName = twitterName;
+        // console.log("get twitter " + post.userId);
+        // if(twitterName = getTwitterNameById(post.userId))
+        //   console.log("get twitter " + twitterName);
+        //   properties.twitterName = twitterName;
 
           /*
           var comments = [];
@@ -174,12 +183,13 @@ AddPost = function(newPost, response){
       response.end();
       return;
   }
-
+  console.log("insert new post: " + JSON.stringify(newPost));
   Posts.insert(newPost, function(error, newPostId){
     if (error) {
+      console.log("inset error: " + error);
       var result = {
         result: false,
-        error: error
+        error: error.reason
       };
       response.write(JSON.stringify(result));
     }
@@ -188,6 +198,7 @@ AddPost = function(newPost, response){
         result: true,
         postId: newPostId
       };
+      console.log("insert done");
       AddPostCount(userId);
       response.write(JSON.stringify(result));
     }
@@ -196,7 +207,8 @@ AddPost = function(newPost, response){
 }
 
 UpVotePost = function(postId, userId, response){
-  //TODO: add user id to upvoters
+
+  console.log("upvote post:"+postId + " :" + userId);
   if(!postId || !userId){
     result = {
         result: false,

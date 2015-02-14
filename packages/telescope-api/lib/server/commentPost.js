@@ -1,6 +1,6 @@
 GetPostCommentFromJsonString = function(jsonString){
 
-  var providePostProperties = ['author', 'body', 'htmlBody', 'inactive', 'postId', 'userId'];
+  var providePostProperties = ['author', 'body', 'htmlBody', 'postId', 'userId'];
   var defaultComment = {
        baseScore: 0,
        createdAt: new Date(), 
@@ -9,21 +9,22 @@ GetPostCommentFromJsonString = function(jsonString){
        score: 0, 
        upvoters: [],
        upvotes: 0, 
-       level: 1
+       level: 1,
+       inactive: true
   };
 
     var newComment = defaultComment;
     var result;
-    for(i in providePostProperties){
-      
-      var property = providePostProperties[i];
+
+    providePostProperties.forEach(function(property){
+
       if(jsonString[property] == undefined){
 
           result = {
           result: false,
           error: "property not found: " + property
         };
-          break;
+          return;
       }
       else{
           newComment[property] = jsonString[property];
@@ -32,7 +33,7 @@ GetPostCommentFromJsonString = function(jsonString){
             comment: newComment
           };
       }
-    }
+    });
     return result;
 };
 
