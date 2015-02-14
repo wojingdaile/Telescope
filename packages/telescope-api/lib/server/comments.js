@@ -20,12 +20,12 @@ GetCommentFromJsonString = function(jsonString){
   var providePostProperties = ['author', 'body', 'htmlBody', 'inactive', 'postId', 'userId', 'parentCommentId'];
   var defaultComment = {
        baseScore: 0,
-       createdAt: new Date(), 
-       downvotes: 0, 
-       postedAt: new Date(), 
-       score: 0, 
+       createdAt: new Date(),
+       downvotes: 0,
+       postedAt: new Date(),
+       score: 0,
        upvoters: [],
-       upvotes: 0, 
+       upvotes: 0,
        level: 1 + parentLevel
   };
 
@@ -33,7 +33,7 @@ GetCommentFromJsonString = function(jsonString){
   var res = true;
   var missingProperty;
   for(i in providePostProperties){
-    
+
     var property = providePostProperties[i];
     if(jsonString[property] == undefined){
         missingProperty =property;
@@ -78,7 +78,7 @@ GetComments = function(post_id, parseId, limit, skip){
     });
 
     for(var i = 0 ; i < comments.length; i++){
-      
+
       var comment = comments[i];
       var insertIndex = i;
       comments.filter(function(subComment){
@@ -96,7 +96,7 @@ GetComments = function(post_id, parseId, limit, skip){
     comments: comments
   };
 	return JSON.stringify(res);
-		
+
 };
 
 AddComment = function(newComment, response){
@@ -182,24 +182,16 @@ UpVoteComment = function(commentId, userId, response){
     return;
   }
 
-  Comments.update({_id: commentId}, {$inc: {upvotes: 1}, $push: {upvoters: userId}}, function(error, numOfDocAffected){
-    
-    var result;
-    if(error){
-      result = {
-        result: false,
-        error: error
-      };
-    }
-    else{
-      result = {
-        result: true,
-        numOfDocAffected: numOfDocAffected
-      };
-    }
-    response.write(JSON.stringify(result));
-    response.end();
+  var user = Meteor.users.findOne({
+    _id: userId
   });
+  var item = Comments.findOne({
+    _id: commentId
+  });
+  var result = upvoteItem(Comments, item, user);
+
+  response.write(JSON.stringify({result: result}));
+  response.end();
 }
 
 DownVoteComment = function(commentId, userId, response){
@@ -214,22 +206,14 @@ DownVoteComment = function(commentId, userId, response){
     return;
   }
 
-  Comments.update({_id: commentId}, {$inc: {downvotes: 1}} , function(error, numOfDocAffected){
-    
-    var result;
-    if(error){
-      result = {
-        result: false,
-        error: error
-      };
-    }
-    else{
-      result = {
-        result: true,
-        numOfDocAffected: numOfDocAffected
-      };
-    }
-    response.write(JSON.stringify(result));
-    response.end();
+  var user = Meteor.users.findOne({
+    _id: userId
   });
+  var item = Comments.findOne({
+    _id: commentId
+  });
+  var result = downvoteItem(Comments, item, user);
+
+  response.write(JSON.stringify({result: result}));
+  response.end();
 }
