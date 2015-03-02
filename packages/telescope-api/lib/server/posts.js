@@ -93,8 +93,10 @@ GetCategoryPosts = function(categorySegment, parseId, limitSegment, skip) {
       attachments: post.attachment,
       upvotes: post.upvoters.length,
       upvoted: hasUpvote,
-      userId: post.userId
+      userId: post.userId,
+      commentCount: post.commentCount
     };
+    console.log("post: " +post.commentCount);
 
     if (post.body)
       properties.body = post.body;
@@ -222,7 +224,6 @@ AddPost = function(newPost, response) {
 
 UpVotePost = function(postId, userId, response) {
 
-  console.log("upvote post:" + postId + " :" + userId);
   if (!postId || !userId) {
     result = {
       result: false,

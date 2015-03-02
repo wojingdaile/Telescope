@@ -258,8 +258,9 @@ Meteor.startup(function () {
 
       var parseId = this.request.headers['x-auth-token'];
           if (parseId == undefined) {
-          this.response.statusCode = 400;
+          this.response.writeHead(200, {"Content-Type": "text/json"});
           var result = JSON.stringify({
+            result: false,
             "error": "X-Auth-Token invalid."
           })
           this.response.write(result);
@@ -300,6 +301,7 @@ Meteor.startup(function () {
         this.response.end();
       } else if (this.request.method == 'POST') {
         var userInfo = this.request.body;
+        // var userInfo = JSON.parse(this.request.body);
         if (!userInfo == undefined || !Object.keys(userInfo).length == 0) {
           CreateUser(userInfo, this.response);
         }

@@ -10,6 +10,7 @@ GetUser = function(parseId, reponse) {
 
 CreateUser = function(userInfo, response) {
 
+  console.log(userInfo);
   var parseId = userInfo.parseId;
   var services = userInfo.services;
   var result;

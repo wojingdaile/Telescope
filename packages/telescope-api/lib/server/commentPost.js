@@ -52,6 +52,8 @@ AddPostComment= function(newComment, response){
 				result: true,
 				commentId: commentId
 			};
+      var postId = newComment.postId;
+      Posts.update({_id: postId},{$inc: {commentCount: 1}});
 			response.write(JSON.stringify(res));
 		}
 		response.end()
