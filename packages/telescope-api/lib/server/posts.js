@@ -1,6 +1,5 @@
 GetPostFromJsonString = function(jsonString) {
 
-  console.log("get post from json string: " + JSON.stringify(jsonString));
   var providePostProperties = ['author', 'body', 'htmlBody', , 'categories', 'status', 'title', 'userId'];
   var defaultPost = {
     baseScore: 0,
@@ -96,7 +95,6 @@ GetCategoryPosts = function(categorySegment, parseId, limitSegment, skip) {
       userId: post.userId,
       commentCount: post.commentCount
     };
-    console.log("post: " +post.commentCount);
 
     if (post.body)
       properties.body = post.body;
@@ -188,7 +186,6 @@ DeletePost = function(deletePostId, response) {
 
 AddPost = function(newPost, response) {
 
-  console.log("add new post:" + newPost);
   var userId = newPost.userId;
   if (!userId) {
     var result = {
@@ -200,10 +197,8 @@ AddPost = function(newPost, response) {
     return;
   }
 
-  console.log("insert new post: " + JSON.stringify(newPost));
   Posts.insert(newPost, function(error, newPostId) {
     if (error) {
-      console.log("inset error: " + error);
       var result = {
         result: false,
         error: error.reason
@@ -214,7 +209,6 @@ AddPost = function(newPost, response) {
         result: true,
         postId: newPostId
       };
-      console.log("insert done");
       AddPostCount(userId);
       response.write(JSON.stringify(result));
     }

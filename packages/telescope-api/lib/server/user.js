@@ -13,6 +13,7 @@ CreateUser = function(userInfo, response) {
   console.log(userInfo);
   var parseId = userInfo.parseId;
   var services = userInfo.services;
+  var avatar = userInfo.avatar;
   var result;
   if (!parseId || !services) {
      result = {
@@ -53,7 +54,7 @@ CreateUser = function(userInfo, response) {
         response.write(JSON.stringify(result));
         response.end();
       } else {
-        Meteor.users.update({_id: userId},{$set:{services: services, parseId: parseId}}, function(error, numOfFileAffected){
+        Meteor.users.update({_id: userId},{$set:{services: services, parseId: parseId, avatar: avatar}}, function(error, numOfFileAffected){
           if(error){
           response.statusCode = 500;
           result = {

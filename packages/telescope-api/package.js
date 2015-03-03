@@ -12,6 +12,7 @@ Package.onUse(function (api) {
                  'lib/server/commentPost.js',
                  'lib/server/user.js',
                  'lib/server/search.js',
+                 'lib/server/avatar.js',
 
                  'lib/components/scoring.js',
                  'lib/components/vote.js'], ['server']);

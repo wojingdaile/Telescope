@@ -301,7 +301,6 @@ Meteor.startup(function () {
         this.response.end();
       } else if (this.request.method == 'POST') {
         var userInfo = this.request.body;
-        // var userInfo = JSON.parse(this.request.body);
         if (!userInfo == undefined || !Object.keys(userInfo).length == 0) {
           CreateUser(userInfo, this.response);
         }
@@ -336,6 +335,26 @@ Meteor.startup(function () {
       var result = SearchPost(limit, q);
       this.response.write(JSON.stringify(result));
       this.response.end();
+    }
+  });
+
+  Router.route('avatar',{
+    where: 'server',
+    path: '/api/avatar',
+    action: function(){
+      var userId = this.params.query.userId;
+      this.response.writeHead(200, {"Content-Type": "text/json"});
+      if(!userId){
+          var reault = {
+            result: false,
+            error: "useId not provide"
+          };
+          this.response.write(JSON.stringify(result));
+          this.response.end()
+      }
+      else{
+        GetAvatar(userId, this.response);
+      }
     }
   });
 

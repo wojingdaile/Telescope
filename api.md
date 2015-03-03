@@ -242,3 +242,21 @@ json
     "avatar" : "http://"
 }
 ```
+
+#Avatar
+###获取头像:**GET**[/api/avatar?userId=xxx]()
+>返回数据结构
+
+```
+{
+    "result":true,
+    "avatar":"http://graph.facebook.com/1578938125680529/picture"
+}
+```
+
+```
+{
+    "result":true,
+    "error":"user not found"
+}
+```
