@@ -10,7 +10,6 @@ GetUser = function(parseId, reponse) {
 
 CreateUser = function(userInfo, response) {
 
-  console.log(userInfo);
   var parseId = userInfo.parseId;
   var services = userInfo.services;
   var avatar = userInfo.avatar;
@@ -76,7 +75,6 @@ CreateUser = function(userInfo, response) {
         });
       }
   } else {
-    console.log(" user exist:"+ user._id);
     result = {
           result: true,
           userId: user._id
