@@ -114,7 +114,6 @@ Meteor.startup(function () {
         case "PUT":{
           var parseId = this.request.headers['x-auth-token'];
           if (parseId == undefined) {
-              this.response.statusCode = 400;
               var result = JSON.stringify({
                 "error": "X-Auth-Token invalid."
               });

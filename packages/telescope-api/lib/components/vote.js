@@ -52,7 +52,7 @@ upvoteItem = function(collection, item, user) {
     collectionName = collection._name.slice(0, 1).toUpperCase() + collection._name.slice(1);
 
   // make sure user has rights to upvote first
-  if (!user || !can.upvote(user, collection, true) || hasUpvotedItem(item, user))
+  if (!user || hasUpvotedItem(item, user))
     return false;
 
   // in case user is upvoting a previously downvoted item, cancel downvote first
@@ -121,7 +121,7 @@ downvoteItem = function(collection, item, user) {
     collectionName = collection._name.slice(0, 1).toUpperCase() + collection._name.slice(1);
 
   // make sure user has rights to downvote first
-  if (!user || !can.downvote(user, collection, true) || hasDownvotedItem(item, user))
+  if (!user || hasDownvotedItem(item, user))
     return false;
 
   // in case user is downvoting a previously upvoted item, cancel upvote first

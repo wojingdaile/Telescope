@@ -235,7 +235,7 @@ UpVotePost = function(postId, userId, response) {
     _id: postId
   });
   var result = upvoteItem(Posts, item, user);
-
+  console.log("result:",result);
   response.write(JSON.stringify({
     result: result
   }));
@@ -261,7 +261,6 @@ DownVotePost = function(postId, userId, response) {
     _id: postId
   });
   var result = downvoteItem(Posts, item, user);
-
   response.write(JSON.stringify({
     result: result
   }));
