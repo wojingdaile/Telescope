@@ -141,20 +141,10 @@ json
 ```
 {
     "author" : "xionggai",
-    "baseScore" : 1,
     "body" : "reply hello",
-    "createdAt" : ISODate("2015-01-19T08:45:40.658Z"),
-    "downvotes" : 0,
     "htmlBody" : "<p>reply hello</p>\n",
-    "inactive" : false,
     "parentCommentId" : "x2BSB5cW95NDirb93",
     "postId" : "smEdcocbizmyPwhJf",
-    "postedAt" : ISODate("2015-01-19T08:45:40.658Z"),
-    "score" : 0.004214175026677331,
-    "upvoters" : [ 
-        "AtkugG9xemuc5yKge"
-    ],
-    "upvotes" : 1,
     "userId" : "AtkugG9xemuc5yKge"
 }
 ```

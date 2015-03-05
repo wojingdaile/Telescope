@@ -78,6 +78,10 @@ commentSchemaObject = {
   isDeleted: {
     type: Boolean,
     optional: true
+  },
+  level:{
+    type: Number,
+    optional: true
   }
 };
 

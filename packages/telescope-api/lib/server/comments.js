@@ -16,8 +16,9 @@ GetCommentFromJsonString = function(jsonString){
     };
     return result;
   };
-  var parentLevel = parentComment.level;
-  var providePostProperties = ['author', 'body', 'htmlBody', 'inactive', 'postId', 'userId', 'parentCommentId'];
+  var parentLevel = parentComment.level == undefined? 1: parentComment.level;
+  console.log("parent level " + parentLevel);
+  var providePostProperties = ['author', 'body', 'htmlBody', 'postId', 'userId', 'parentCommentId'];
   var defaultComment = {
        baseScore: 0,
        createdAt: new Date(),
@@ -26,26 +27,28 @@ GetCommentFromJsonString = function(jsonString){
        score: 0,
        upvoters: [],
        upvotes: 0,
+       inactive: true,
        level: 1 + parentLevel
   };
 
   var newComment = defaultComment;
-  var res = true;
+  var parasValid = true;
   var missingProperty;
-  for(i in providePostProperties){
 
-    var property = providePostProperties[i];
+  providePostProperties.forEach(function(property){
+
     if(jsonString[property] == undefined){
         missingProperty =property;
-        result = false;
-        break;
+        parasValid = false;
+        return;
     }
     else{
         newComment[property] = jsonString[property];
     }
-  }
+  });
+  console.log("new comment :" + JSON.stringify(newComment));
   var result;
-  if(!res){
+  if(!parasValid){
     result = {
       result: false,
       error: "property not found: " + missingProperty
@@ -111,7 +114,7 @@ AddComment = function(newComment, response){
       response.end();
       return;
   }
-
+  console.log("insert new comment: " + JSON.stringify(newComment));
   Comments.insert(newComment, function(error, commentId){
 
     if (error) {
