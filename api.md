@@ -104,7 +104,8 @@ json
 
 ```
 {
-	"postId": "123"
+	"postId": "123",
+    "userId": "183y7323"
 }
 ```
 
@@ -113,7 +114,8 @@ json
 
 ```
 {
-	"postId": "123"
+	"postId": "123",
+    "userId": "183y7323"
 }
 ```
 
@@ -166,7 +168,8 @@ json
 
 ```
 {
-	"commentId": "11233"
+	"commentId": "11233",
+    "userId": "183y7323"
 }
 ```
 
