@@ -1,6 +1,29 @@
 GetPostFromJsonString = function(jsonString) {
 
-  var providePostProperties = ['author', 'body', 'htmlBody', , 'categories', 'status', 'title', 'userId'];
+  var userId = jsonString["userId"];
+  var parseId;
+  if(userId == undefined){
+    result = {
+      result: false,
+      error: "property not found: userId"
+    };
+    return result;
+  }
+  else{
+    var user =  Meteor.users.findOne({_id: userId});
+    if(user == undefined){
+      result = {
+        result: false,
+        error: "user not found"
+      };
+      return result;
+    }
+    else{
+      parseId = user.parseId;
+    }
+  }
+
+  var providePostProperties = ['author', 'body', 'htmlBody', 'categories', 'status', 'title', 'userId'];
   var defaultPost = {
     baseScore: 0,
     clickCount: 0,
@@ -14,9 +37,10 @@ GetPostFromJsonString = function(jsonString) {
     upvotes: 0,
     viewCount: 0,
     inactive: true,
-    sticky: false
+    sticky: false,
+    parseId: parseId
   };
-
+  console.log("default post:" + JSON.stringify(defaultPost));
   var newPost = defaultPost;
   var res = true;
   var missingProperty;
@@ -196,7 +220,7 @@ AddPost = function(newPost, response) {
     response.end();
     return;
   }
-
+  console.log("insert new post:" + JSON.stringify(newPost));
   Posts.insert(newPost, function(error, newPostId) {
     if (error) {
       var result = {

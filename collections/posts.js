@@ -189,6 +189,10 @@ postSchemaObject = {
         });
       }
     }
+  },
+  parseId:{
+    type: String,
+    optional: true
   }
 };
 

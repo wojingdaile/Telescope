@@ -1,5 +1,25 @@
 GetPostCommentFromJsonString = function(jsonString){
 
+  var userId = jsonString["userId"];
+  var parseId;
+  if(userId == undefined){
+    var result = {
+      result: false,
+      error: "userId not found"
+    };
+    return result;
+  }
+  else{
+    var user = Meteor.users.findOne({_id: userId});
+    if(user == undefined){
+        var result = {
+          result: false,
+          error: "user not found"
+        };
+        return result;
+    }
+  }
+  parseId = user.parseId;
   var providePostProperties = ['author', 'body', 'htmlBody', 'postId', 'userId'];
   var defaultComment = {
        baseScore: 0,
@@ -10,7 +30,8 @@ GetPostCommentFromJsonString = function(jsonString){
        upvoters: [],
        upvotes: 0, 
        level: 1,
-       inactive: true
+       inactive: true,
+       parseId: parseId
   };
 
     var newComment = defaultComment;

@@ -1,5 +1,25 @@
 GetCommentFromJsonString = function(jsonString){
 
+  var userId = jsonString["userId"];
+  var parseId;
+  if(userId == undefined){
+    var result = {
+      result: false,
+      error: "userId not found"
+    };
+    return result;
+  }
+  else{
+    var user = Meteor.users.findOne({_id: userId});
+    if(user == undefined){
+        var result = {
+          result: false,
+          error: "user not found"
+        };
+        return result;
+    }
+  }
+  parseId = user.parseId;
   var parentId = jsonString["parentCommentId"];
   if (!parentId) {
     result = {
@@ -28,7 +48,8 @@ GetCommentFromJsonString = function(jsonString){
        upvoters: [],
        upvotes: 0,
        inactive: true,
-       level: 1 + parentLevel
+       level: 1 + parentLevel,
+       parseId: parseId
   };
 
   var newComment = defaultComment;

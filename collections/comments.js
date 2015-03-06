@@ -82,6 +82,10 @@ commentSchemaObject = {
   level:{
     type: Number,
     optional: true
+  },
+  parseId:{
+    type: String,
+    optional: true
   }
 };
 
