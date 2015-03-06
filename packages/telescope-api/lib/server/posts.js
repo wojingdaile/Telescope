@@ -117,7 +117,8 @@ GetCategoryPosts = function(categorySegment, parseId, limitSegment, skip) {
       upvotes: post.upvoters.length,
       upvoted: hasUpvote,
       userId: post.userId,
-      commentCount: post.commentCount
+      commentCount: post.commentCount,
+      parseId:post.parseId
     };
 
     if (post.body)
