@@ -102,7 +102,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
     var url = getPostLink(post);
     var hasUpvote = false;
     var hasDownVote = false;
-    if (userId.length > 0) {
+    if (userId != undefined && userId.length > 0) {
       if (post.upvoters.contains(userId)) {
         hasUpvote = true;
       }
