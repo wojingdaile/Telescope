@@ -260,7 +260,30 @@ UpVotePost = function(postId, userId, response) {
     _id: postId
   });
   var result = upvoteItem(Posts, item, user);
-  console.log("result:",result);
+  response.write(JSON.stringify({
+    result: result
+  }));
+  response.end();
+}
+
+DeUpVotePost = function(postId, userId, response){
+
+  if (!postId || !userId) {
+    result = {
+      result: false,
+      error: "params error"
+    };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+  var user = Meteor.users.findOne({
+    _id: userId
+  });
+  var item = Posts.findOne({
+    _id: postId
+  });
+  var result = cancelUpvote(Posts, item, user);
   response.write(JSON.stringify({
     result: result
   }));
@@ -286,6 +309,31 @@ DownVotePost = function(postId, userId, response) {
     _id: postId
   });
   var result = downvoteItem(Posts, item, user);
+  response.write(JSON.stringify({
+    result: result
+  }));
+  response.end();
+}
+
+DeDownVotePost = function(postId, userId, response) {
+
+  if (!postId || !userId) {
+    result = {
+      result: false,
+      error: "params error"
+    };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+
+  var user = Meteor.users.findOne({
+    _id: userId
+  });
+  var item = Posts.findOne({
+    _id: postId
+  });
+  var result = cancelDownvote(Posts, item, user);
   response.write(JSON.stringify({
     result: result
   }));

@@ -218,6 +218,30 @@ UpVoteComment = function(commentId, userId, response){
   response.end();
 }
 
+DeUpVoteComment = function(commentId, userId, response){
+
+  if(!commentId || !userId){
+    result = {
+        result: false,
+        error: "params error"
+      };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+
+  var user = Meteor.users.findOne({
+    _id: userId
+  });
+  var item = Comments.findOne({
+    _id: commentId
+  });
+  var result = cancelUpvote(Comments, item, user);
+
+  response.write(JSON.stringify({result: result}));
+  response.end();
+}
+
 DownVoteComment = function(commentId, userId, response){
 
   if(!commentId || !userId){
@@ -241,3 +265,28 @@ DownVoteComment = function(commentId, userId, response){
   response.write(JSON.stringify({result: result}));
   response.end();
 }
+
+DeDownVoteComment = function(commentId, userId, response){
+
+  if(!commentId || !userId){
+    result = {
+        result: false,
+        error: "params error"
+      };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
+  }
+
+  var user = Meteor.users.findOne({
+    _id: userId
+  });
+  var item = Comments.findOne({
+    _id: commentId
+  });
+  var result = cancelDownvote(Comments, item, user);
+
+  response.write(JSON.stringify({result: result}));
+  response.end();
+}
+

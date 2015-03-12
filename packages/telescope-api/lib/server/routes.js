@@ -137,6 +137,14 @@ Meteor.startup(function () {
             var userId = this.request.body.userId;
             DownVotePost(postId, userId, this.response);
           }
+          else if("deupvote" == action){
+            var userId = this.request.body.userId;
+            DeUpVotePost(postId, userId, this.response);
+          }
+          else if("dedownvote" == action){
+            var userId = this.request.body.userId;
+            DeDownVotePost(postId, userId, this.response);
+          }
           else{
             this.response.statusCode = 400;
             var result = {
@@ -232,6 +240,14 @@ Meteor.startup(function () {
           else if("downvote" == action){
             var userId = this.request.body.userId;
             DownVoteComment(commentId, userId, this.response);
+          }
+          else if("deupvote" == action){
+            var userId = this.request.body.userId;
+            DeUpVoteComment(commentId, userId, this.response);
+          }
+          else if("dedownvote" == action){
+            var userId = this.request.body.userId;
+            DeDownVoteComment(commentId, userId, this.response);
           }
           else{
             this.response.statusCode = 400;
