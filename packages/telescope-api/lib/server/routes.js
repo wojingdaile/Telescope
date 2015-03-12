@@ -63,14 +63,12 @@ Meteor.startup(function () {
       this.response.writeHead(200, {"Content-Type": "text/json"});
       switch(method){
         case "GET":{
-          if(parseId == undefined){
-            parseId = "";
-          }
+          var userId = this.params.query.userId;
           var category = this.params.query.category;
           var limit = parseInt(this.params.query.limit);
           var skip = parseInt(this.params.query.skip);
 
-          this.response.write(GetCategoryPosts(category, parseId, limit, skip));
+          this.response.write(GetCategoryPosts(category, userId, limit, skip));
           this.response.end();
           break;
         }
@@ -170,10 +168,11 @@ Meteor.startup(function () {
       switch(method){
 
         case "GET":{
+          var userId = this.params.query.userId;
           var post_id = this.params.query.postId;
           var limit = parseInt(this.params.query.limit);
           var skip = parseInt(this.params.query.skip);
-          this.response.write(GetComments(post_id, limit, skip));
+          this.response.write(GetComments(post_id, userId ,limit, skip));
           this.response.end();
           break;
         }

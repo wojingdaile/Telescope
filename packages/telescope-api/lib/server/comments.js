@@ -84,16 +84,17 @@ GetCommentFromJsonString = function(jsonString){
   return result;
 };
 
-GetComments = function(post_id, parseId, limit, skip){
+GetComments = function(post_id, userId, limit, skip){
 
 	var comments = [];
 	limit = typeof limit === 'undefined' ? 20 : limit;
 	skip  = typeof skip === 'undefined' ? 0 : skip;
 
 	if(post_id){
-
 		Comments.find({postId: post_id}, {sort: {postedAt: 1}, limit: limit,skip: skip}).forEach(function(comment) {
-      comment["upvoted"] = comment.upvoters.contains(parseId)
+      comment["upvoted"] = comment.upvoters.contains(userId);
+      comment["downvoted"] = comment.downvoters != undefined ? (comment.downvoters.contains(userId)? true: false) : false;
+
       if(comment["level"] == undefined){
         comment["level"] = 1;
       }
