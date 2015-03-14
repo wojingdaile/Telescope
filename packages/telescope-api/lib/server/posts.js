@@ -40,7 +40,7 @@ GetPostFromJsonString = function(jsonString) {
     sticky: false,
     parseId: parseId
   };
-  console.log("default post:" + JSON.stringify(defaultPost));
+
   var newPost = defaultPost;
   var res = true;
   var missingProperty;
@@ -97,7 +97,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
   Posts.find({
     categories: [category],
     status: STATUS_APPROVED
-  },{limit: limit,skip: skip}).forEach(function(post) {
+  },{sort: {createdAt: -1},limit: limit,skip: skip}).forEach(function(post) {
 
     var url = getPostLink(post);
     var hasUpvote = false;
@@ -126,7 +126,6 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       commentCount: post.commentCount,
       parseId:post.parseId
     };
-
     if (post.body)
       properties.body = post.body;
 
