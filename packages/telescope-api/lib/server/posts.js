@@ -110,6 +110,14 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
         hasDownVote = true;
       }
     }
+
+    var avatar = "";
+    if(post.userId != undefined){
+      var user = Meteor.users.findOne({_id: post.userId});
+      if (user != undefined) {
+          avatar = user.avatar;
+        };
+    }
     
     var properties = {
       title: post.title,
@@ -124,7 +132,8 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       downvoted: hasDownVote,
       userId: post.userId,
       commentCount: post.commentCount,
-      parseId:post.parseId
+      parseId:post.parseId,
+      avatar: avatar
     };
     if (post.body)
       properties.body = post.body;

@@ -95,6 +95,16 @@ GetComments = function(post_id, userId, limit, skip){
       comment["upvoted"] = comment.upvoters.contains(userId);
       comment["downvoted"] = comment.downvoters != undefined ? (comment.downvoters.contains(userId)? true: false) : false;
 
+      if(comment.userId != undefined){
+      var user = Meteor.users.findOne({_id: comment.userId});
+      if (user != undefined) {
+          comment["avatar"] = user.avatar;
+      }
+      else{
+          comment["avatar"] = "";
+      }
+    }
+
       if(comment["level"] == undefined){
         comment["level"] = 1;
       }
