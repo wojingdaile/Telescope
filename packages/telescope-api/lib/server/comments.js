@@ -185,6 +185,7 @@ DeleteComment = function(comment_id, response){
           response.end();
         }
         else{
+          DeleleSubComments(comment_id);
           var result = {
           result: true
           };
@@ -202,6 +203,14 @@ DeleteComment = function(comment_id, response){
       response.end();
     }
   }
+}
+
+DeleleSubComments = function(commentId){
+  console.log("delete: " + commentId);
+  Comments.find({parentCommentId: commentId}).forEach(function(subComment){
+            Comments.remove(subComment);
+            DeleleSubComments(subComment._id);
+  });
 }
 
 
