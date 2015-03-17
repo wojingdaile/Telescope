@@ -143,6 +143,10 @@ Meteor.startup(function () {
             var userId = this.request.body.userId;
             DeDownVotePost(postId, userId, this.response);
           }
+          else if("addAttactments" == action){
+            var attactments = this.request.body.attactments;
+            AddAttacments(postId, attactments,this.response);
+          }
           else{
             this.response.statusCode = 400;
             var result = {

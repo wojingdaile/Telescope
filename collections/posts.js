@@ -127,6 +127,10 @@ postSchemaObject = {
       omit: true
     }
   },
+  attactments:{
+    type: [String], 
+    optional: true
+  },
   score: {
     type: Number,
     decimal: true,

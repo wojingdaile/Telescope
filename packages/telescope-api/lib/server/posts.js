@@ -1,5 +1,6 @@
 GetPostFromJsonString = function(jsonString) {
 
+  console.log("get post from json string: " + JSON.stringify(jsonString));
   var userId = jsonString["userId"];
   var parseId;
   if(userId == undefined){
@@ -59,6 +60,12 @@ GetPostFromJsonString = function(jsonString) {
     }
 
   });
+
+  if(jsonString["attactments"] != undefined){
+    newPost["attactments"] = jsonString["attactments"];
+  }
+
+  console.log("get post: " +JSON.stringify(newPost));
 
   var result;
   if (!res) {
@@ -370,10 +377,35 @@ UpdatePost = function(postId, newBody, response) {
     } else {
       result = {
         result: true,
-        numOfDocAffected: numOfDocAffected
+        numOfFileAffected: numOfFileAffected
       };
     }
     response.write(JSON.stringify(result));
     response.end();
   })
+}
+
+AddAttacments = function(postId, attacments, response){
+
+  Posts.update({
+    _id:postId
+  },
+  {
+    $set: {attactments : attacments}
+  }, function(error, numOfFileAffected){
+    var result;
+    if (error) {
+      result = {
+        result: false,
+        error: error
+      };
+    } else {
+      result = {
+        result: true,
+        numOfFileAffected: numOfFileAffected
+      };
+    }
+    response.write(JSON.stringify(result));
+    response.end();
+  });
 }
