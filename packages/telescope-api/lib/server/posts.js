@@ -140,11 +140,12 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       userId: post.userId,
       commentCount: post.commentCount,
       parseId:post.parseId,
-      avatar: avatar
+      avatar: avatar,
     };
     if (post.body)
       properties.body = post.body;
-
+    if(post.attactments)
+      properties.attactments = post.attactments;
 
     if (post.url)
       properties.domain = getDomain(url);
