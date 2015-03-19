@@ -110,7 +110,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
     var hasUpvote = false;
     var hasDownVote = false;
     if (userId != undefined && userId.length > 0) {
-      if (post.upvoters.contains(userId)) {
+      if (post.upvoters && post.upvoters.contains(userId)) {
         hasUpvote = true;
       }
       if(post.downvoters != undefined && post.downvoters.contains(userId)){
@@ -134,7 +134,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       url: url,
       guid: post._id,
       attachments: post.attachment,
-      upvotes: post.upvoters.length,
+      upvotes: (post.upvoters == undefined)? 0:post.upvoters.length,
       upvoted: hasUpvote,
       downvoted: hasDownVote,
       userId: post.userId,
