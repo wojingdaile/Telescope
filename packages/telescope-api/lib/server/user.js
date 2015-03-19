@@ -30,7 +30,7 @@ CreateUser = function(userInfo, response) {
 
   // search if user exsited
   var user = Meteor.users.findOne({parseId: parseId});
-  if (user == undefined) {;
+  if (user == undefined) {
     try{
       var userId = Accounts.createUser({username: username});
     }

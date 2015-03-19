@@ -125,7 +125,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
           avatar = user.avatar;
         };
     }
-    
+    console.log("============get post: " + JSON.stringify(post));
     var properties = {
       title: post.title,
       headline: post.title, // for backwards compatibility
