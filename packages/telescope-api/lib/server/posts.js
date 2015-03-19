@@ -110,7 +110,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
     var hasUpvote = false;
     var hasDownVote = false;
     if (userId != undefined && userId.length > 0) {
-      if (post.upvoters && post.upvoters.contains(userId)) {
+      if ((post.upvoters != undefined) && post.upvoters.contains(userId)) {
         hasUpvote = true;
       }
       if(post.downvoters != undefined && post.downvoters.contains(userId)){
