@@ -162,6 +162,7 @@ AddComment = function(newComment, response){
         commentId: commentId
       };
       AddCommentCount(userId);
+      Posts.update({_id: newComment.postId},{$inc: {commentCount: 1}});
       response.write(JSON.stringify(result));
     }
     response.end();
@@ -185,6 +186,7 @@ DeleteComment = function(comment_id, response){
           response.end();
         }
         else{
+          Posts.update({_id: deleteComment.postId},{$inc: {commentCount: -1}});
           DeleleSubComments(comment_id);
           var result = {
           result: true
@@ -208,7 +210,11 @@ DeleteComment = function(comment_id, response){
 DeleleSubComments = function(commentId){
   console.log("delete: " + commentId);
   Comments.find({parentCommentId: commentId}).forEach(function(subComment){
-            Comments.remove(subComment);
+            Comments.remove(subComment,function(error){
+              if(!error){
+                Posts.update({_id: subComment.postId},{$inc: {commentCount: -1}});
+              }
+            });
             DeleleSubComments(subComment._id);
   });
 }
