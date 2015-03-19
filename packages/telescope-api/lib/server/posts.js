@@ -46,7 +46,7 @@ GetPostFromJsonString = function(jsonString) {
   var res = true;
   var missingProperty;
   providePostProperties.forEach(function(property) {
-x
+    
     if (property == "categories") {
       newPost["categories"] = [jsonString["categories"]];
     } else {
