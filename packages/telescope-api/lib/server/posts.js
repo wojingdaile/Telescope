@@ -143,9 +143,9 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       properties.body = post.body;
     if(post.attactments)
       properties.attactments = post.attactments;
-    if (post["version" != undefined]) {
-      properties["version"] = post["version"]；
-    };
+    if (post["version" != undefined])
+        properties.version = post.version;
+
     if (post.url)
       properties.domain = getDomain(url);
     // console.log("get twitter " + post.userId);
