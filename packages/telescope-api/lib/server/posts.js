@@ -143,7 +143,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       properties.body = post.body;
     if(post.attactments)
       properties.attactments = post.attactments;
-    if (post["version" != undefined])
+    if (post.version != undefined)
         properties.version = post.version;
 
     if (post.url)
