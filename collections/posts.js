@@ -139,6 +139,10 @@ postSchemaObject = {
       omit: true
     }
   },
+  version:{
+    type: String,
+    optional: true
+  },
   status: {
     type: Number,
     optional: true,

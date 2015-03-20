@@ -64,6 +64,9 @@ GetPostFromJsonString = function(jsonString) {
   if(jsonString["attactments"] != undefined){
     newPost["attactments"] = jsonString["attactments"];
   }
+  if (jsonString["version" != undefined]) {
+    newPost["version"] = jsonString["version"];
+  };
 
   console.log("get post: " +JSON.stringify(newPost));
 
