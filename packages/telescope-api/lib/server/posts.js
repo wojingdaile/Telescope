@@ -64,11 +64,6 @@ GetPostFromJsonString = function(jsonString) {
   if(jsonString["attactments"] != undefined){
     newPost["attactments"] = jsonString["attactments"];
   }
-  if (jsonString["version" != undefined]) {
-    newPost["version"] = jsonString["version"];
-  };
-
-  console.log("get post: " +JSON.stringify(newPost));
 
   var result;
   if (!res) {
@@ -128,7 +123,6 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
           avatar = user.avatar;
         };
     }
-    console.log("============get post: " + JSON.stringify(post));
     var properties = {
       title: post.title,
       headline: post.title, // for backwards compatibility
@@ -149,7 +143,9 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       properties.body = post.body;
     if(post.attactments)
       properties.attactments = post.attactments;
-
+    if (post["version" != undefined]) {
+      properties["version"] = post["version"]；
+    };
     if (post.url)
       properties.domain = getDomain(url);
     // console.log("get twitter " + post.userId);
