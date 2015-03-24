@@ -102,7 +102,7 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
   Posts.find({
     categories: [category],
     status: STATUS_APPROVED
-  },{sort: {score: -1},limit: limit,skip: skip}).forEach(function(post) {
+  },{sort: {createdAt: -1},limit: limit,skip: skip}).forEach(function(post) {
 
     var url = getPostLink(post);
     var hasUpvote = false;
