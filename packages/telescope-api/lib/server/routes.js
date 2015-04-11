@@ -317,6 +317,7 @@ Meteor.startup(function () {
         this.response.end();
       } else if (this.request.method == 'POST') {
         var userInfo = this.request.body;
+        console.log("create new user: " + JSON.stringify(userInfo));
         if (!userInfo == undefined || !Object.keys(userInfo).length == 0) {
           CreateUser(userInfo, this.response);
         }
@@ -370,6 +371,26 @@ Meteor.startup(function () {
       }
       else{
         GetAvatar(userId, this.response);
+      }
+    }
+  });
+
+  Router.route('checkUsername',{
+    where: 'server',
+    path: '/api/checkUsername',
+    action: function(){
+      var username = this.params.query.username;
+      this.response.writeHead(200, {"Content-Type": "text/json"});
+      if(!username){
+          var reault = {
+            result: false,
+            error: "username not provide"
+          };
+          this.response.write(JSON.stringify(result));
+          this.response.end()
+      }
+      else{
+        CheckUsername(username, this.response);
       }
     }
   });

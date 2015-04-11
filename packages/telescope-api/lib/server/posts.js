@@ -24,7 +24,7 @@ GetPostFromJsonString = function(jsonString) {
     }
   }
 
-  var providePostProperties = ['author', 'body', 'htmlBody', 'categories', 'status', 'title', 'userId'];
+  var providePostProperties = ['author', 'body', 'categories', 'status', 'title', 'userId'];
   var defaultPost = {
     baseScore: 0,
     clickCount: 0,
@@ -141,6 +141,8 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
     };
     if (post.body)
       properties.body = post.body;
+    if(post.htmlBody)
+      properties.htmlBody = post.htmlBody;
     if(post.attactments)
       properties.attactments = post.attactments;
     if (post.version != undefined)

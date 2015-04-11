@@ -14,7 +14,7 @@ CreateUser = function(userInfo, response) {
   var services = userInfo.services;
   var avatar = userInfo.avatar;
   var result;
-  if (!parseId || !services) {
+  if (!parseId) {
      result = {
       result: false,
       error: "paras error."
@@ -43,7 +43,6 @@ CreateUser = function(userInfo, response) {
         response.write(JSON.stringify(result));
         response.end();
     }
-
       if (!userId) {
         response.statusCode = 500;
         result = {
@@ -77,7 +76,8 @@ CreateUser = function(userInfo, response) {
   } else {
     result = {
           result: true,
-          userId: user._id
+          userId: user._id,
+          isAdmin: user.isAdmin
         };
     response.statusCode = 400;
     response.write(JSON.stringify(result));
