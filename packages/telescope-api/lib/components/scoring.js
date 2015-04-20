@@ -33,9 +33,9 @@ updateScore = function(args) {
   //      and posts can become inactive
   var n = 30;
   // x = score increase amount of a single vote after n days (for n=100, x=0.000040295)
-  var x = 1 / Math.pow(n * 24 + 2, 1.3);
+  var x = 1 / Math.pow(n * 24 + 2, 1.1);
   // time decay factor
-  var f = 1.3;
+  var f = 1.1;
 
   // use baseScore if defined, if not just use the number of votes
   // note: for transition period, also use votes if there are more votes than baseScore
