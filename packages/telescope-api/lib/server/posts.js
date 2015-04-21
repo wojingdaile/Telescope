@@ -131,13 +131,14 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       url: url,
       guid: post._id,
       attachments: post.attachment,
-      upvotes: (post.upvoters == undefined)? 0:post.upvoters.length,
+      upvotes: post.upvotes,
+      downvotes: post.downvotes,
       upvoted: hasUpvote,
       downvoted: hasDownVote,
       userId: post.userId,
       commentCount: post.commentCount,
       parseId:post.parseId,
-      avatar: avatar,
+      avatar: avatar
     };
     if (post.body)
       properties.body = post.body;
