@@ -239,7 +239,7 @@ cancelDownvote = function(collection, item, user) {
       downvoters: user._id
     },
     $inc: {
-      downvotes: 1,
+      downvotes: -1,
       baseScore: votePower
     },
     $set: {
