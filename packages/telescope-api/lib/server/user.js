@@ -85,7 +85,7 @@ CreateUser = function(userInfo, response) {
   }
 }
 
-UpdateUser = function (parseId, userInfo, response) {
+UpdateUserName = function (parseId, newName, response) {
   var user = Meteor.users.findOne({parseId: parseId});
 
   if (!user) {
@@ -98,9 +98,10 @@ UpdateUser = function (parseId, userInfo, response) {
     return;
   }
 
-  Users.update({parseId: parseId}, userInfo, function (error, affected) {
-    if (!error) {
+  Meteor.users.update({parseId: parseId},{$set: {"username": newName}}, function (error, affected) {
+    if (error) {
       var result = JSON.stringify({
+        "result": false,
         "error": "update user failed."
       });
       response.statusCode = 400;
@@ -111,7 +112,7 @@ UpdateUser = function (parseId, userInfo, response) {
 
 
     var result = JSON.stringify({
-      "result": "update succ, " + affected + " document modified."
+      "result": true
     });
     response.write(result);
     response.end()
@@ -119,49 +120,6 @@ UpdateUser = function (parseId, userInfo, response) {
   });
 }
 
-AddFacebookInfo = function(parseId, facebookInfo, response){
-
-  if(facebookInfo.accessToken == undefined){
-    var result = {
-      result: false,
-      error: "facebook info has no accessToken info."
-    };
-    response.write(result);
-    response.end();
-    return;
-  }
-  var needProperties =  [
-            "accessToken",
-            "email",
-            "expiresAt",
-            "first_name",
-            "gender",
-            "id",
-            "last_name",
-            "link",
-            "locale",
-            "name"
-        ];
-  var needInfo;
-  for(i in needProperties){
-    var property = needProperties[i];
-    info[property] = facebookInfo[property];
-  }
-
-  var ueser = Meteor.users.findOne({parseId: parseId});
-  if(!user){
-    var result = {
-      result: false,
-      error: "user not found"
-    };
-    response.write(result);
-    response.end();
-    return;
-  }
-  var services = user.services;
-  user['services']['facebook'] = needInfo;
-  UpdateUser(parseId, user, response);
-}
 
 AddCommentCount = function(userId){
 

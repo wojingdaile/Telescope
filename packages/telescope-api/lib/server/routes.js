@@ -317,17 +317,34 @@ Meteor.startup(function () {
         this.response.end();
       } else if (this.request.method == 'POST') {
         var userInfo = this.request.body;
-        console.log("create new user: " + JSON.stringify(userInfo));
         if (!userInfo == undefined || !Object.keys(userInfo).length == 0) {
           CreateUser(userInfo, this.response);
         }
       } else if (this.request.method == 'PUT') {
-        this.response.statusCode = 400;
-        var result = JSON.stringify({
-          "error": "method not implemented."
-        })
-        this.response.write(result);
-        this.response.end();
+        
+        if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "result": false,
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+        var newName = this.request.body["username"];
+        if (newName == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "result": false,
+            "error": "no new name"
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
+        UpdateUserName(parseId, newName, this.response);
+
       } else {
         this.response.statusCode = 400;
         var result = JSON.stringify({
