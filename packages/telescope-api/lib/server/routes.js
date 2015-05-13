@@ -420,4 +420,134 @@ Meteor.startup(function () {
       this.response.end();
     }
   });
+
+  Router.route('showoff', {
+    where: 'server',
+    path: '/api/showoff/',
+    action: function() {
+
+      var method = this.request.method;
+      var parseId = this.request.headers['x-auth-token'];
+      this.response.writeHead(200, {"Content-Type": "text/json"});
+      switch(method){
+        case "POST":{
+
+          var result = GetShowOffFromJsonString(this.request.body);
+          if(!result.result){
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
+          else{
+            uploadShowOff(result.newShowOff, this.response);
+          }
+          break;
+        }
+        case "GET":{
+
+          var userId = this.params.query.userId;
+          var limit = parseInt(this.params.query.limit);
+          var skip = parseInt(this.params.query.skip);
+          var deviceType = this.params.query.deviceType;
+          this.response.write(GetCategoryShowOff(userId, limit, skip, deviceType));
+          this.response.end();
+          break;
+        }
+        case "PUT":{
+
+          var action = this.params.query.action;
+          var showOffId = this.request.body.showOffId;
+          var userId = this.request.body.userId;
+
+          console.log("showOffId " + showOffId + "; userId " + userId);
+          if("likeShowOff" == action){
+            LikeShowOff(showOffId, userId, this.response);
+          }
+          else if("unlikeShowOff" == action){
+            UnlikeShowOff(showOffId, userId, this.response);
+          }
+          else if("purchaseShowOff" == action){
+            PurchaseShowOff(showOffId, userId, this.response);
+          }
+          else if("deleteShowOff" == action){
+            DeleteShowOff(showOffId, userId, this.response);
+          }
+          else{
+            this.response.statusCode = 400;
+            var result = {
+              result: false,
+              error: "action not support"
+            };
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
+          break;
+        }
+      }
+    }
+  });
+
+Router.route('showoffComment', {
+    where: 'server',
+    path: '/api/showoffComment/',
+    action: function() {
+
+      var method = this.request.method;
+      var parseId = this.request.headers['x-auth-token'];
+      this.response.writeHead(200, {"Content-Type": "text/json"});
+      switch(method){
+        case "POST":{
+          var result = GetShowOffCommentFromJsonString(this.request.body);
+          if(!result.result){
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
+          else{
+            uploadShowOffComment(result.newShowOffComment, this.response);
+          }
+          break;
+        }
+        case "GET":{
+            var userId = this.params.query.userId;
+            var limit = parseInt(this.params.query.limit);
+            var skip = parseInt(this.params.query.skip);
+            var parentId = this.params.query.parentId;
+            this.response.write(GetShowOffComments(parentId,userId, limit, skip));
+            this.response.end();
+            break;
+        }
+        case "PUT":{
+          var action = this.params.query.action;
+          var commentId = this.request.body.commentId;
+          var userId = this.request.body.userId;
+
+          console.log("commentId " + commentId + "; userId " + userId);
+          if("likeShowOffComment" == action){
+            LikeShowOffComment(commentId, userId, this.response);
+          }
+          else if("unlikeShowOffComment" == action){
+            UnLikeShowOffComment(commentId, userId, this.response);
+          }
+          else if("hateShowOffComment" == action){
+            HateShowOffComment(commentId, userId, this.response);
+          }
+          else if("unhateShowOffComment" == action){
+            UnHateOffComment(commentId, userId, this.response);
+          }
+          else if("deleteShowOffComment" == action){
+            DeleteOffComment(commentId, userId, this.response);
+          }
+          else{
+            this.response.statusCode = 400;
+            var result = {
+              result: false,
+              error: "action not support"
+            };
+            this.response.write(JSON.stringify(result));
+            this.response.end();
+          }
+          break;
+        }
+      }
+    }
+  });
 });
