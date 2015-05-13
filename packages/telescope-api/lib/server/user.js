@@ -120,6 +120,42 @@ UpdateUserName = function (parseId, newName, response) {
   });
 }
 
+UpdateUserAvatar = function(parseId, newAvatar, response){
+
+  var user = Meteor.users.findOne({parseId: parseId});
+
+  if (!user) {
+    var result = JSON.stringify({
+      "error": "user not exist."
+    });
+    response.statusCode = 400;
+    response.write(result);
+    response.end()
+    return;
+  }
+
+  Meteor.users.update({parseId: parseId},{$set: {"avatar": newAvatar}}, function (error, affected) {
+    if (error) {
+      var result = JSON.stringify({
+        "result": false,
+        "error": "update user failed."
+      });
+      response.statusCode = 400;
+      response.write(result);
+      response.end()
+      return;
+    }
+
+
+    var result = JSON.stringify({
+      "result": true
+    });
+    response.write(result);
+    response.end()
+    return;
+  });
+}
+
 
 AddCommentCount = function(userId){
 
