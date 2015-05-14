@@ -305,7 +305,7 @@ PurchaseShowOff = function(showOffId, userId, response) {
   });
 
   if (showOffItem) {
-
+    var buys = showOffItem.purchases;
     buys ++;
 
     Showoffs.update({
