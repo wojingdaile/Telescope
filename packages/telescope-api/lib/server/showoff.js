@@ -290,7 +290,7 @@ UnlikeShowOff = function(showOffId, userId, response) {
 PurchaseShowOff = function(showOffId, userId, response) {
 
   console.log("purchase for showoffid :" + showOffId + "; userId :"  + userId);
-  if (!showOffId || !userId) {
+  if (!showOffId) {
     result = {
       result: false,
       error: "params error"
@@ -300,35 +300,19 @@ PurchaseShowOff = function(showOffId, userId, response) {
     return;
   }
 
-  var user = Meteor.users.findOne({
-    _id: userId
-  });
   var showOffItem = Showoffs.findOne({
     _id: showOffId
   });
 
-  if (user && showOffItem) {
-    var buyers = showOffItem.purchasers;
-    var buys = showOffItem.purchases;
-    for (var i = buyers.length - 1; i >= 0; i--) {
-      if (buyers[i] == userId) {
-
-          response.write(JSON.stringify({
-            result: false,
-            error: "purchased before"
-          }));
-          response.end();
-      };
-    };
+  if (showOffItem) {
 
     buys ++;
-    buyers.push(userId);
 
     Showoffs.update({
       _id: showOffId
     }, 
     {
-      $set:{purchases: buys,purchasers: buyers},
+      $set:{purchases: buys},
     }, function(error) {
       var result;
       if (error) {
