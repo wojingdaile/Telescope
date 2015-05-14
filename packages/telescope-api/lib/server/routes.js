@@ -320,7 +320,8 @@ Meteor.startup(function () {
         if (!userInfo == undefined || !Object.keys(userInfo).length == 0) {
           CreateUser(userInfo, this.response);
         }
-      } else if (this.request.method == 'PUT') {
+      } 
+      else if (this.request.method == 'PUT') {
         
         if (parseId == undefined) {
           this.response.statusCode = 400;
@@ -333,27 +334,25 @@ Meteor.startup(function () {
           return;
         }
         var newName = this.request.body["username"];
-        if (newName == undefined) {
+        var newAvatar = this.request.body["avatar"];
+
+        if (newName == undefined && newAvatar == undefined) {
           this.response.statusCode = 400;
           var result = JSON.stringify({
             "result": false,
-            "error": "no new name"
+            "error": "params error"
           })
           this.response.write(result);
           this.response.end();
           return;
         }
-        UpdateUserName(parseId, newName, this.response);
-
-      } else {
-        this.response.statusCode = 400;
-        var result = JSON.stringify({
-          "error": "method not allowed."
-        })
-        this.response.write(result);
-        this.response.end();
-      }
-    }
+        else if(newName != undefined){
+          UpdateUserName(parseId, newName, this.response);
+          return;
+        }
+        else if(newAvatar != undefined){
+          UpdateUserAvatar(parseId, newAvatar, this.response);
+        }}}
   });
 
   Router.route('search', {
