@@ -130,7 +130,7 @@ GetCategoryShowOff = function(userId, limitSegment, skip, device_Type) {
       numOfDownload:showoffItem.purchases,
       numOfLikes:showoffItem.upvotes,
       numOfComments:showoffItem.commentConut,
-      uploadedAt:showoffItem.uploadedAt,
+      uploadedAt:showoffItem.createdAt,
       bigPreviewWidth:showoffItem.bigPreviewWidth,
       bigPreviewHeight:showoffItem.bigPreviewHeight,
       hasPurchased:hasPurchased,
