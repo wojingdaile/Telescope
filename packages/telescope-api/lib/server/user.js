@@ -77,7 +77,8 @@ CreateUser = function(userInfo, response) {
     result = {
           result: true,
           userId: user._id,
-          isAdmin: user.isAdmin
+          isAdmin: user.isAdmin,
+          avatar: user.avatar
         };
     response.statusCode = 400;
     response.write(JSON.stringify(result));
