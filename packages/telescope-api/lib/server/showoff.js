@@ -26,7 +26,7 @@ GetShowOffFromJsonString = function(jsonString) {
 
   console.log("parseId :" + parseId);
 
-  var providePostProperties = ['showOffItemType', 'authorId', 'themeDisplayName', 'descriptionTitle', 'descriptionContent' , 'bigPreviewURL' , 'packageURL' , 'deviceType' , 'price' , 'bigPreviewWidth' , 'bigPreviewHeight'];
+  var providePostProperties = ['showOffItemType', 'authorId', 'themeDisplayName', 'descriptionTitle', 'descriptionContent' , 'bigPreviewURL' , 'packageURL' , 'deviceType' , 'price' , 'bigPreviewWidth' , 'bigPreviewHeight' , 'fontName'];
   var defaultShowOff = {
     createdAt: new Date(),
     postedAt: new Date(),
@@ -135,7 +135,8 @@ GetCategoryShowOff = function(userId, limitSegment, skip, device_Type) {
       bigPreviewHeight:showoffItem.bigPreviewHeight,
       hasPurchased:hasPurchased,
       hasLiked:hasLiked,
-      parseId:showoffItem.parseId
+      parseId:showoffItem.parseId,
+      fontName:showoffItem.fontName
 
     };
     showoffs.push(properties);

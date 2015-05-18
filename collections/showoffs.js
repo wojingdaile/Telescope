@@ -66,6 +66,10 @@ showOffSchemaObject = {
     type: Number,
     optional: true
   },
+  fontName:{
+    type: String,
+    optional: true
+  },
   bigPreviewWidth:{
     type: Number,
     optional: true
