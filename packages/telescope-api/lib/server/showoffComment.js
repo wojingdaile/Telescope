@@ -36,7 +36,7 @@ GetShowOffCommentFromJsonString = function(jsonString) {
     parentLevel = parentComment.level;
   };
 
-  var providePostCommentProperties = ['authorId', 'commentContent', 'parentId', 'showOffId', 'isRootComment'];
+  var providePostCommentProperties = ['authorId', 'commentContent', 'parentId', 'showOffId'];
   var defaultShowOffComment = {
     createdAt: new Date(),
     postedAt: new Date(),
@@ -47,7 +47,8 @@ GetShowOffCommentFromJsonString = function(jsonString) {
     inactive: true,
     level: 1 + parentLevel,
     userId: userId,
-    parseId: parseId
+    parseId: parseId,
+    isRootComment: isParentPost ? true: false
   };
 
   var newShowOffComment = defaultShowOffComment;
@@ -105,13 +106,10 @@ uploadShowOffComment = function(newShowOffComment, response) {
           result: false,
           error: error
         };
-      } else {
-        result = {
-          result: true
-        };
-      }
-      response.write(JSON.stringify(result));
-      response.end();
+
+        response.write(JSON.stringify(result));
+        response.end();
+      }   
     })
 
   ShowoffComments.insert(newShowOffComment, function(error, newShowOffCommentID) {
