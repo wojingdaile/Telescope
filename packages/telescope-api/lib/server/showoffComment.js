@@ -547,9 +547,9 @@ DeleteOffComment  = function(commentId, userId, response) {
         else{
 
           Showoffs.update({_id: deleteComment.showOffId},{$inc: {commentCount: -1}});
-          DeleleSubComments(commentId);
+          //DeleleSubComments(commentId);
           var result = {
-          result: true
+            result: true
           };
           response.write(JSON.stringify(result));
           response.end();
