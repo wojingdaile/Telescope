@@ -109,10 +109,12 @@ GetCategoryShowOff = function(userId, limitSegment, skip, device_Type) {
 
     var authorAvatar;
     var authorName;
+    var isAuthorVIP;
     var author =  Meteor.users.findOne({_id: showoffItem.authorId});
     if (author != undefined) {
       authorAvatar = author.avatar;
       authorName = author.username;
+      isAuthorVIP = author.isVIP;
     }
 
     var properties = {
@@ -136,7 +138,8 @@ GetCategoryShowOff = function(userId, limitSegment, skip, device_Type) {
       hasPurchased:hasPurchased,
       hasLiked:hasLiked,
       parseId:showoffItem.parseId,
-      fontName:showoffItem.fontName
+      fontName:showoffItem.fontName,
+      isAuthorVIP:isAuthorVIP
 
     };
     showoffs.push(properties);

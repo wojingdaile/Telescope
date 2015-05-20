@@ -40,6 +40,10 @@ var userSchemaObject = {
     type: Object,
     optional: true,
     blackbox: true
+  },
+  isVIP: {
+    type: Boolean,
+    optional: true
   }
 };
 

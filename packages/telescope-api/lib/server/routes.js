@@ -323,36 +323,42 @@ Meteor.startup(function () {
       } 
       else if (this.request.method == 'PUT') {
         
-        if (parseId == undefined) {
-          this.response.statusCode = 400;
-          var result = JSON.stringify({
-            "result": false,
-            "error": "X-Auth-Token invalid."
-          })
-          this.response.write(result);
-          this.response.end();
-          return;
-        }
-        var newName = this.request.body["username"];
-        var newAvatar = this.request.body["avatar"];
+          if (parseId == undefined) {
+            this.response.statusCode = 400;
+            var result = JSON.stringify({
+              "result": false,
+              "error": "X-Auth-Token invalid."
+            })
+            this.response.write(result);
+            this.response.end();
+            return;
+          }
+          var newName = this.request.body["username"];
+          var newAvatar = this.request.body["avatar"];
+          var isVIP = this.request.body["isVIP"];
 
-        if (newName == undefined && newAvatar == undefined) {
-          this.response.statusCode = 400;
-          var result = JSON.stringify({
-            "result": false,
-            "error": "params error"
-          })
-          this.response.write(result);
-          this.response.end();
-          return;
-        }
-        else if(newName != undefined){
-          UpdateUserName(parseId, newName, this.response);
-          return;
-        }
-        else if(newAvatar != undefined){
-          UpdateUserAvatar(parseId, newAvatar, this.response);
-        }}}
+          if (newName == undefined && newAvatar == undefined) {
+            this.response.statusCode = 400;
+            var result = JSON.stringify({
+              "result": false,
+              "error": "params error"
+            })
+            this.response.write(result);
+            this.response.end();
+            return;
+          }
+          else if(newName != undefined){
+            UpdateUserName(parseId, newName, this.response);
+            return;
+          }
+          else if(newAvatar != undefined){
+            UpdateUserAvatar(parseId, newAvatar, this.response);
+          }
+          else if (isVIP != undefined) {
+            var boolIsVIP = isVIP ? true : false
+            UpdateVIP(parseId, boolIsVIP, this.response);
+          }
+        }}
   });
 
   Router.route('search', {

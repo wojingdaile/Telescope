@@ -13,6 +13,9 @@ CreateUser = function(userInfo, response) {
   var parseId = userInfo.parseId;
   var services = userInfo.services;
   var avatar = userInfo.avatar;
+  var isVIP = userInfo.isVIP ? true : false;
+
+  console.log("isvip :" + isVIP);
   var result;
   if (!parseId) {
      result = {
@@ -52,21 +55,23 @@ CreateUser = function(userInfo, response) {
         response.write(JSON.stringify(result));
         response.end();
       } else {
-        Meteor.users.update({_id: userId},{$set:{services: services, parseId: parseId, avatar: avatar}}, function(error, numOfFileAffected){
+        console.log("will save vip :" + isVIP);
+        Meteor.users.update({_id: userId},{$set:{services: services, parseId: parseId, avatar: avatar, isVIP: isVIP}}, function(error, numOfFileAffected){
           if(error){
-          response.statusCode = 500;
-          result = {
-          result: false,
-          error: error
-        };
-        response.write(JSON.stringify(result));
-        response.end();
+            response.statusCode = 500;
+            result = {
+              result: false,
+              error: error
+            };
+            response.write(JSON.stringify(result));
+            response.end();
           }
           else{
             response.statusCode = 200;
             result = {
             result: true,
-            userId: userId
+            userId: userId,
+            isVIP: isVIP
           };
           response.write(JSON.stringify(result));
           response.end();
@@ -74,12 +79,28 @@ CreateUser = function(userInfo, response) {
         });
       }
   } else {
-    result = {
+
+    console.log("get user is vip :" + user.isVIP);
+    if (!user.isVIP && isVIP) {
+      Meteor.users.update({parseId: parseId},{$set: {"isVIP": isVIP}}, function (error, affected) {
+      if (error) {
+        result = JSON.stringify({
+          "result": false,
+          "error": "update vip failed."
+        });
+      }
+      });
+    }
+    else{
+      result = {
           result: true,
           userId: user._id,
           isAdmin: user.isAdmin,
-          avatar: user.avatar
+          avatar: user.avatar,
+          isVIP: user.isVIP
         };
+    }
+
     response.statusCode = 400;
     response.write(JSON.stringify(result));
     response.end()
@@ -175,3 +196,39 @@ AddPostCount = function(userId){
     }
   });
 }
+
+UpdateVIP = function(parseId, isVIP, response){
+
+  var user = Meteor.users.findOne({parseId: parseId});
+
+  if (!user) {
+    var result = JSON.stringify({
+      "error": "user not exist."
+    });
+    response.statusCode = 400;
+    response.write(result);
+    response.end()
+    return;
+  }
+
+  Meteor.users.update({parseId: parseId},{$set: {"isVIP": isVIP}}, function (error, affected) {
+    if (error) {
+      var result = JSON.stringify({
+        "result": false,
+        "error": "update vip failed."
+      });
+      response.statusCode = 400;
+      response.write(result);
+      response.end()
+      return;
+    }
+
+
+    var result = JSON.stringify({
+      "result": true
+    });
+    response.write(result);
+    response.end()
+    return;
+  });
+} 

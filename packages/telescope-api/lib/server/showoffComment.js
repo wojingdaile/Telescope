@@ -147,6 +147,7 @@ GetShowOffComments = function(showOffId, userId, limitSegment, skip) {
         if (user != undefined) {
           showOffCommentItem["authorFaceURL"] = user.avatar;
           showOffCommentItem["authorName"] = user.username;
+          showOffCommentItem["isAuthorVIP"] = user.isVIP;
         }
         else{
           showOffCommentItem["authorFaceURL"] = "";
