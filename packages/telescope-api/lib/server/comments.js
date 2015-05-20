@@ -99,9 +99,11 @@ GetComments = function(post_id, userId, limit, skip){
       var user = Meteor.users.findOne({_id: comment.userId});
       if (user != undefined) {
           comment["avatar"] = user.avatar;
+          comment["isAuthorVIP"] = user.isVIP;
       }
       else{
           comment["avatar"] = "";
+          comment["isAuthorVIP"] = false;
       }
     }
 

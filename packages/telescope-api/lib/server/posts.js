@@ -117,10 +117,12 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
     }
 
     var avatar = "";
+    var isAuthorVIP  = false;
     if(post.userId != undefined){
       var user = Meteor.users.findOne({_id: post.userId});
       if (user != undefined) {
           avatar = user.avatar;
+          isAuthorVIP = user.isVIP;
         };
     }
     var properties = {
@@ -138,7 +140,9 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       userId: post.userId,
       commentCount: post.commentCount,
       parseId:post.parseId,
-      avatar: avatar
+      avatar: avatar,
+      isAuthorVIP: isAuthorVIP
+
     };
     if (post.body)
       properties.body = post.body;
