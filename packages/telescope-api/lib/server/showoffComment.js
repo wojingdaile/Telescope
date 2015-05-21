@@ -551,7 +551,7 @@ DeleteOffComment  = function(commentId, userId, response) {
             if(error)
               console.log("delete comment error:" + error);
           });
-          // DeleleSubComments(commentId);
+          DeleleSubComments(commentId);
           var result = {
             result: true
           };
