@@ -547,7 +547,10 @@ DeleteOffComment  = function(commentId, userId, response) {
         }
         else{
 
-          // Showoffs.update({_id: deleteComment.showOffId},{$inc: {commentCount: -1}});
+          Showoffs.update({_id: deleteComment.showOffId},{$inc: {commentCount: -1}}, function(error){
+            if(error)
+              console.log("delete comment error:" + error);
+          });
           // DeleleSubComments(commentId);
           var result = {
             result: true
