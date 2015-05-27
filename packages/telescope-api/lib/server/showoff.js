@@ -47,7 +47,7 @@ GetShowOffFromJsonString = function(jsonString) {
   var res = true;
   var missingProperty;
   providePostProperties.forEach(function(property) {
-    
+
       newShowOff[property] = jsonString[property];
   });
 
@@ -97,13 +97,18 @@ uploadShowOff = function(newShowOff, response) {
   })
 };
 
-GetCategoryShowOff = function(userId, limitSegment, skip, device_Type) {
+GetCategoryShowOff = function(userId, itemId, limitSegment, skip, device_Type) {
   var showoffs = [];
   var limit = typeof limitSegment === 'undefined' ? 20 : limitSegment // default limit: 20 showoffs
+  var search = {deviceType: device_Type};
+  if (itemId != undefined) {
+      search['_id'] = itemId;
+  }
+
   skip = typeof skip === 'undefined' ? 0 : skip;
   console.log("will get showoff  limit " + limit + " skip " + skip);
   console.log("deviceType : " + device_Type);
-  Showoffs.find({deviceType: device_Type},{sort: {createdAt: -1},limit: limit,skip: skip}).forEach(function(showoffItem) {
+  Showoffs.find(search, {sort: {createdAt: -1},limit: limit,skip: skip}).forEach(function(showoffItem) {
     var hasPurchased = showoffItem.purchasers != undefined ? (showoffItem.purchasers.contains(userId)? true: false) : false;
     var hasLiked = showoffItem.upvoters != undefined ? (showoffItem.upvoters.contains(userId)? true: false)  : false;
 
@@ -188,7 +193,7 @@ LikeShowOff = function(showOffId, userId, response) {
 
     Showoffs.update({
       _id: showOffId
-    }, 
+    },
     {
       $set:{upvotes: likes,upvoters: likers},
     }, function(error) {
@@ -314,7 +319,7 @@ PurchaseShowOff = function(showOffId, userId, response) {
 
     Showoffs.update({
       _id: showOffId
-    }, 
+    },
     {
       $set:{purchases: buys},
     }, function(error) {

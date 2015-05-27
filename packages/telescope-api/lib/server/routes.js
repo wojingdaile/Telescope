@@ -320,9 +320,9 @@ Meteor.startup(function () {
         if (!userInfo == undefined || !Object.keys(userInfo).length == 0) {
           CreateUser(userInfo, this.response);
         }
-      } 
+      }
       else if (this.request.method == 'PUT') {
-        
+
           if (parseId == undefined) {
             this.response.statusCode = 400;
             var result = JSON.stringify({
@@ -450,10 +450,11 @@ Meteor.startup(function () {
         case "GET":{
 
           var userId = this.params.query.userId;
+          var itemId = this.params.query.itemId;
           var limit = parseInt(this.params.query.limit);
           var skip = parseInt(this.params.query.skip);
           var deviceType = this.params.query.deviceType;
-          this.response.write(GetCategoryShowOff(userId, limit, skip, deviceType));
+          this.response.write(GetCategoryShowOff(userId, itemId, limit, skip, deviceType));
           this.response.end();
           break;
         }
