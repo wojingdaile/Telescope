@@ -1,3 +1,5 @@
+window.location.replace("http://forum.fancykeyapp.com/api/healthy");
+
 // Session variables
 Session.set('postsLimit', getSetting('postsPerPage', 10));
 
