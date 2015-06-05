@@ -337,6 +337,13 @@ Meteor.startup(function () {
           var newAvatar = this.request.body["avatar"];
           var isVIP = this.request.body["isVIP"];
 
+          //客户端要求在PUT方法里加入删除用户的操作
+          var action = this.request.query.action;
+          if (action == "deleteUser") {
+            DelUserInfo(parseId, this.response);
+            return;
+          }
+
           if (newName == undefined && newAvatar == undefined) {
             this.response.statusCode = 400;
             var result = JSON.stringify({

@@ -8,6 +8,68 @@ GetUser = function(parseId, reponse) {
   return JSON.stringify(user);
 }
 
+DelUserInfo = function(parseId, response) {
+  var deleteUser = Meteor.users.findOne({parseId: parseId});
+
+  if (deleteUser) {
+      //console.log("id:", deleteUser._id)
+      Posts.find({userId: deleteUser._id}).forEach(function(deletePost) {
+        //console.log("deletePost:", deletePost)
+
+        Posts.remove(deletePost, function(error) {
+          if (error) {
+            var result = {
+              result: false,
+              error: error
+            };
+            response.write(JSON.stringify(result));
+            response.end();
+          }
+        });
+      });
+
+      Comments.find({userId: deleteUser._id}).forEach(function(deleteComment) {
+        //console.log("deleteComment:", deleteComment)
+
+        Comments.remove(deleteComment, function(error) {
+          if (error) {
+            var result = {
+              result: false,
+              error: error
+            };
+            response.write(JSON.stringify(result));
+            response.end();
+          }
+        });
+      });
+
+      Meteor.users.remove(deleteUser, function(error) {
+        if (error) {
+          var result = {
+            result: false,
+            error: error
+          };
+          response.write(JSON.stringify(result));
+          response.end();
+        } else {
+          var result = {
+            result: true
+          };
+          response.write(JSON.stringify(result));
+          response.end();
+        }
+      });
+
+  } else {
+      var result = {
+        result: false,
+        reson: "delete user not found"
+      };
+      response.write(JSON.stringify(result));
+      response.end();
+  }
+}
+
 CreateUser = function(userInfo, response) {
 
   var parseId = userInfo.parseId;
@@ -231,4 +293,4 @@ UpdateVIP = function(parseId, isVIP, response){
     response.end()
     return;
   });
-} 
+}
