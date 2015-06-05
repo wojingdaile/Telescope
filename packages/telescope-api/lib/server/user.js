@@ -12,7 +12,7 @@ DelUserInfo = function(parseId, response) {
   var deleteUser = Meteor.users.findOne({parseId: parseId});
 
   if (deleteUser) {
-      //console.log("id:", deleteUser._id)
+      console.log("id:", deleteUser._id)
       Posts.find({userId: deleteUser._id}).forEach(function(deletePost) {
         //console.log("deletePost:", deletePost)
 
@@ -32,6 +32,32 @@ DelUserInfo = function(parseId, response) {
         //console.log("deleteComment:", deleteComment)
 
         Comments.remove(deleteComment, function(error) {
+          if (error) {
+            var result = {
+              result: false,
+              error: error
+            };
+            response.write(JSON.stringify(result));
+            response.end();
+          }
+        });
+      });
+
+      Showoffs.find({authorId: deleteUser._id}).forEach(function(deleteShowOff) {
+        Showoffs.remove(deleteShowOff,function(error){
+          if (error) {
+            var result = {
+              result: false,
+              error: error
+            };
+            response.write(JSON.stringify(result));
+            response.end();
+          }
+        });
+      });
+
+      ShowoffComments.find({authorId: deleteUser._id}).forEach(function(deleteShowOffComment) {
+        ShowoffComments.remove(deleteShowOffComment,function(error){
           if (error) {
             var result = {
               result: false,
