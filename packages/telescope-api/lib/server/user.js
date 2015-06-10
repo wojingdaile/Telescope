@@ -1,9 +1,35 @@
+QueryUser = function(conditions) {
+  var limit = parseInt(conditions.limit);
+  var skip = parseInt(conditions.skip);
+  var sort = conditions.sort == undefined ? {} : JSON.parse(conditions.sort);
+
+  delete conditions.limit;
+  delete conditions.skip;
+  delete conditions.sort;
+
+  // var user = Meteor.users.findOne({parseId: "xxxxxx"})
+  var results = [];
+  Meteor.users.find(conditions, {
+    limit: limit,
+    skip: skip,
+    sort: sort
+  }).forEach(function(user) {
+    results.push(user);
+  });
+
+
+  return JSON.stringify(results);
+}
 
 GetUser = function(parseId, reponse) {
-  var user = Meteor.users.findOne({parseId: parseId})
+  var user = Meteor.users.findOne({
+    parseId: parseId
+  })
 
-  delete user.services;
-  delete user.email_hash;
+  if (user) {
+    delete user.services;
+    delete user.email_hash;
+  }
 
   return JSON.stringify(user);
 }
@@ -18,10 +44,10 @@ CreateUser = function(userInfo, response) {
   console.log("isvip :" + isVIP);
   var result;
   if (!parseId) {
-     result = {
+    result = {
       result: false,
       error: "paras error."
-     };
+    };
     response.statusCode = 400;
     response.write(JSON.stringify(result));
     response.end()
@@ -32,73 +58,89 @@ CreateUser = function(userInfo, response) {
   // var email = userInfo.email;
 
   // search if user exsited
-  var user = Meteor.users.findOne({parseId: parseId});
+  var user = Meteor.users.findOne({
+    parseId: parseId
+  });
   if (user == undefined) {
-    try{
-      var userId = Accounts.createUser({username: username});
-    }
-    catch(error){
+    try {
+      var userId = Accounts.createUser({
+        username: username
+      });
+    } catch (error) {
       response.statusCode = error.error;
       result = {
-          result: false,
-          error: error.reason
-        };
-        response.write(JSON.stringify(result));
-        response.end();
+        result: false,
+        error: error.reason
+      };
+      response.write(JSON.stringify(result));
+      response.end();
     }
-      if (!userId) {
-        response.statusCode = 500;
-        result = {
-          result: false,
-          error: 'create user failed, sys err.'
-        };
-        response.write(JSON.stringify(result));
-        response.end();
-      } else {
-        console.log("will save vip :" + isVIP);
-        Meteor.users.update({_id: userId},{$set:{services: services, parseId: parseId, avatar: avatar, isVIP: isVIP}}, function(error, numOfFileAffected){
-          if(error){
-            response.statusCode = 500;
-            result = {
-              result: false,
-              error: error
-            };
-            response.write(JSON.stringify(result));
-            response.end();
-          }
-          else{
-            response.statusCode = 200;
-            result = {
+    if (!userId) {
+      response.statusCode = 500;
+      result = {
+        result: false,
+        error: 'create user failed, sys err.'
+      };
+      response.write(JSON.stringify(result));
+      response.end();
+    } else {
+      console.log("will save vip :" + isVIP);
+      Meteor.users.update({
+        _id: userId
+      }, {
+        $set: {
+          services: services,
+          parseId: parseId,
+          avatar: avatar,
+          isVIP: isVIP
+        }
+      }, function(error, numOfFileAffected) {
+        if (error) {
+          response.statusCode = 500;
+          result = {
+            result: false,
+            error: error
+          };
+          response.write(JSON.stringify(result));
+          response.end();
+        } else {
+          response.statusCode = 200;
+          result = {
             result: true,
             userId: userId,
             isVIP: isVIP
           };
           response.write(JSON.stringify(result));
           response.end();
-          }
-        });
-      }
+        }
+      });
+    }
   } else {
 
     console.log("get user is vip :" + user.isVIP);
     if (!user.isVIP && isVIP) {
-      Meteor.users.update({parseId: parseId},{$set: {"isVIP": isVIP}}, function (error, affected) {
-      if (error) {
-        result = JSON.stringify({
-          "result": false,
-          "error": "update vip failed."
-        });
-      }
+      Meteor.users.update({
+        parseId: parseId
+      }, {
+        $set: {
+          "isVIP": isVIP
+        }
+      }, function(error, affected) {
+        if (error) {
+          result = JSON.stringify({
+            "result": false,
+            "error": "update vip failed."
+          });
+        }
       });
-    }
-    else{
+    } else {
       result = {
-          result: true,
-          userId: user._id,
-          isAdmin: user.isAdmin,
-          avatar: user.avatar,
-          isVIP: user.isVIP
-        };
+        result: true,
+        userId: user._id,
+        isAdmin: user.isAdmin,
+        avatar: user.avatar,
+        isVIP: user.isVIP
+      };
     }
 
     response.statusCode = 400;
@@ -107,8 +149,10 @@ CreateUser = function(userInfo, response) {
   }
 }
 
-UpdateUserName = function (parseId, newName, response) {
-  var user = Meteor.users.findOne({parseId: parseId});
+UpdateUserName = function(parseId, newName, response) {
+  var user = Meteor.users.findOne({
+    parseId: parseId
+  });
 
   if (!user) {
     var result = JSON.stringify({
@@ -120,7 +164,13 @@ UpdateUserName = function (parseId, newName, response) {
     return;
   }
 
-  Meteor.users.update({parseId: parseId},{$set: {"username": newName}}, function (error, affected) {
+  Meteor.users.update({
+    parseId: parseId
+  }, {
+    $set: {
+      "username": newName
+    }
+  }, function(error, affected) {
     if (error) {
       var result = JSON.stringify({
         "result": false,
@@ -142,9 +192,11 @@ UpdateUserName = function (parseId, newName, response) {
   });
 }
 
-UpdateUserAvatar = function(parseId, newAvatar, response){
+UpdateUserAvatar = function(parseId, newAvatar, response) {
 
-  var user = Meteor.users.findOne({parseId: parseId});
+  var user = Meteor.users.findOne({
+    parseId: parseId
+  });
 
   if (!user) {
     var result = JSON.stringify({
@@ -156,7 +208,13 @@ UpdateUserAvatar = function(parseId, newAvatar, response){
     return;
   }
 
-  Meteor.users.update({parseId: parseId},{$set: {"avatar": newAvatar}}, function (error, affected) {
+  Meteor.users.update({
+    parseId: parseId
+  }, {
+    $set: {
+      "avatar": newAvatar
+    }
+  }, function(error, affected) {
     if (error) {
       var result = JSON.stringify({
         "result": false,
@@ -179,27 +237,41 @@ UpdateUserAvatar = function(parseId, newAvatar, response){
 }
 
 
-AddCommentCount = function(userId){
+AddCommentCount = function(userId) {
 
-  Meteor.users.update({_id: userId}, {$inc: {commentCount: 1}}, function(error, numOfFileAffected){
-    if(error){
-      console.log("AddCommentCount error: "+ error);
+  Meteor.users.update({
+    _id: userId
+  }, {
+    $inc: {
+      commentCount: 1
+    }
+  }, function(error, numOfFileAffected) {
+    if (error) {
+      console.log("AddCommentCount error: " + error);
     }
   });
 }
 
-AddPostCount = function(userId){
+AddPostCount = function(userId) {
 
-  Meteor.users.update({_id: userId}, {$inc: {postCount: 1}}, function(error, numOfFileAffected){
-    if(error){
-      console.log("AddPostCount error: "+ error);
+  Meteor.users.update({
+    _id: userId
+  }, {
+    $inc: {
+      postCount: 1
+    }
+  }, function(error, numOfFileAffected) {
+    if (error) {
+      console.log("AddPostCount error: " + error);
     }
   });
 }
 
-UpdateVIP = function(parseId, isVIP, response){
+UpdateVIP = function(parseId, isVIP, response) {
 
-  var user = Meteor.users.findOne({parseId: parseId});
+  var user = Meteor.users.findOne({
+    parseId: parseId
+  });
 
   if (!user) {
     var result = JSON.stringify({
@@ -211,7 +283,13 @@ UpdateVIP = function(parseId, isVIP, response){
     return;
   }
 
-  Meteor.users.update({parseId: parseId},{$set: {"isVIP": isVIP}}, function (error, affected) {
+  Meteor.users.update({
+    parseId: parseId
+  }, {
+    $set: {
+      "isVIP": isVIP
+    }
+  }, function(error, affected) {
     if (error) {
       var result = JSON.stringify({
         "result": false,
@@ -231,4 +309,4 @@ UpdateVIP = function(parseId, isVIP, response){
     response.end()
     return;
   });
-} 
+}
