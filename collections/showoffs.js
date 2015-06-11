@@ -94,7 +94,7 @@ showOffSchemaObject = {
     type: [String],
     optional: true
   },
-  upvotes:{ 
+  upvotes:{
     type: Number,
     optional: true
   },
@@ -117,6 +117,22 @@ showOffSchemaObject = {
   inactive:{
     type: Boolean,
     optional: true
+  },
+  score: {
+    type: Number,
+    decimal: true,
+    optional: true,
+    autoform: {
+      omit: true
+    }
+  },
+  baseScore: {
+    type: Number,
+    decimal: true,
+    optional: true,
+    autoform: {
+      omit: true
+    }
   }
 };
 

@@ -21,11 +21,15 @@ Meteor.startup(function () {
     inactiveIntervalId = Meteor.setInterval(function () {
       var updatedPosts = 0;
       var updatedComments = 0;
+      var updatedShowoffs = 0;
       Posts.find({'inactive': true}).forEach(function (post) {
         updatedPosts += updateScore({collection: Posts, item: post});
       });
       Comments.find({'inactive': true}).forEach(function (comment) {
         updatedComments += updateScore({collection: Comments, item: comment});
+      });
+      Showoffs.find({'inactive': true}).forEach(function (showoff) {
+        updatedShowoffs += updateShowOffScore({collection: Showoffs, item: showoff});
       });
     }, 3600 * 1000);
 

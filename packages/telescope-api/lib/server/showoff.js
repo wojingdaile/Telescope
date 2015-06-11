@@ -92,6 +92,13 @@ uploadShowOff = function(newShowOff, response) {
         newShowOffID: newShowOffID
       };
       response.write(JSON.stringify(result));
+
+      var item = Showoffs.findOne({_id: newShowOffID});
+      updateShowOffScore({
+        collection: Showoffs,
+        item: item,
+        forceUpdate: true
+      });
     }
     response.end();
   })
@@ -108,7 +115,7 @@ GetCategoryShowOff = function(userId, itemId, limitSegment, skip, device_Type) {
   skip = typeof skip === 'undefined' ? 0 : skip;
   console.log("will get showoff  limit " + limit + " skip " + skip);
   console.log("deviceType : " + device_Type);
-  Showoffs.find(search, {sort: {createdAt: -1},limit: limit,skip: skip}).forEach(function(showoffItem) {
+  Showoffs.find(search, {sort: {score: -1},limit: limit,skip: skip}).forEach(function(showoffItem) {
     var hasPurchased = showoffItem.purchasers != undefined ? (showoffItem.purchasers.contains(userId)? true: false) : false;
     var hasLiked = showoffItem.upvoters != undefined ? (showoffItem.upvoters.contains(userId)? true: false)  : false;
 
@@ -212,6 +219,13 @@ LikeShowOff = function(showOffId, userId, response) {
       response.end();
     })
 
+    var item = Showoffs.findOne({_id: showOffId});
+    updateShowOffScore({
+      collection: Showoffs,
+      item: item,
+      forceUpdate: true
+    });
+
   }
   else{
     response.write(JSON.stringify({
@@ -286,6 +300,13 @@ UnlikeShowOff = function(showOffId, userId, response) {
       response.end();
     })
 
+    var item = Showoffs.findOne({_id: showOffId});
+    updateShowOffScore({
+      collection: Showoffs,
+      item: item,
+      forceUpdate: true
+    });
+
   }
   else{
     response.write(JSON.stringify({
@@ -337,6 +358,13 @@ PurchaseShowOff = function(showOffId, userId, response) {
       response.write(JSON.stringify(result));
       response.end();
     })
+
+    var item = Showoffs.findOne({_id: showOffId});
+    updateShowOffScore({
+      collection: Showoffs,
+      item: item,
+      forceUpdate: true
+    });
 
   }
   else{

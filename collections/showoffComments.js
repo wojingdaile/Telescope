@@ -73,6 +73,22 @@ showOffCommentSchemaObject = {
   level:{
     type: Number,
     optional: true
+  },
+  score: {
+    type: Number,
+    decimal: true,
+    optional: true,
+    autoform: {
+      omit: true
+    }
+  },
+  baseScore: {
+    type: Number,
+    decimal: true,
+    optional: true,
+    autoform: {
+      omit: true
+    }
   }
 };
 
