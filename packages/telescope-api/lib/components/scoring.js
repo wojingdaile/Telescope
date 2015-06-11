@@ -123,7 +123,7 @@ updateShowOffScore = function (args) {
 
   // improve newest showoff visibility
   if (ageInHours < 1.0) {
-      baseScore += 30;
+      baseScore += 15;
   }
 
   // HN algorithm
