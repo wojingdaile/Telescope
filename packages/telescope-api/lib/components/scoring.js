@@ -123,7 +123,7 @@ updateShowOffScore = function (args) {
 
   // improve newest showoff visibility
   if (firstTime) {
-      baseScore += 10;
+      baseScore += 20;
   }
 
   // HN algorithm
