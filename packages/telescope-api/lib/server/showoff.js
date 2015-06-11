@@ -97,7 +97,8 @@ uploadShowOff = function(newShowOff, response) {
       updateShowOffScore({
         collection: Showoffs,
         item: item,
-        forceUpdate: true
+        forceUpdate: true,
+        firstTime: true
       });
     }
     response.end();
