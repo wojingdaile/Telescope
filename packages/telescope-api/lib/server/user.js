@@ -1,6 +1,6 @@
 QueryUser = function(conditions) {
-  var limit = parseInt(conditions.limit);
-  var skip = parseInt(conditions.skip);
+  var limit = parseInt(conditions.limit) || 10;
+  var skip = parseInt(conditions.skip) || 0;
   var sort = conditions.sort == undefined ? {} : JSON.parse(conditions.sort);
 
   delete conditions.limit;
