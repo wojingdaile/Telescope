@@ -122,7 +122,7 @@ updateShowOffScore = function (args) {
   var baseScore = votes + purchases * 2 + 1;    // make purchases more valuable
 
   // improve newest showoff visibility
-  if (ageInHours < 1) {
+  if (ageInHours < 1.0) {
       baseScore += 30;
   }
 
