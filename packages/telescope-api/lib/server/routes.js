@@ -306,42 +306,42 @@ Meteor.startup(function() {
 
   // users query only authorized for admins.
   Router.route('qusers', {
-      where: 'server',
-      path: '/api/users',
-      action: function() {
-          var parseId = this.request.headers['x-auth-token'];
-          this.response.writeHead(200, {
-            "Content-Type": "text/json"
-          });
+    where: 'server',
+    path: '/api/users',
+    action: function() {
+      var parseId = this.request.headers['x-auth-token'];
+      this.response.writeHead(200, {
+        "Content-Type": "text/json"
+      });
 
-          if (this.request.method == 'GET') {
-            if (parseId == undefined) {
-              this.response.statusCode = 400;
-              var result = JSON.stringify({
-                "error": "X-Auth-Token invalid."
-              })
-              this.response.write(result);
-              this.response.end();
-              return;
-            }
+      if (this.request.method == 'GET') {
+        if (parseId == undefined) {
+          this.response.statusCode = 400;
+          var result = JSON.stringify({
+            "error": "X-Auth-Token invalid."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
 
-            var user = GetUser(parseId);
-            user = user == undefined ? "{}" : user;
-            user = JSON.parse(user);
-            if (!user.isAdmin) {
-                this.response.statusCode = 401;
-                var result = JSON.stringify({
-                  "error": "Not authorized."
-                })
-                this.response.write(result);
-                this.response.end();
-                return;
-            }
+        var user = GetUser(parseId);
+        user = user == undefined ? "{}" : user;
+        user = JSON.parse(user);
+        if (!user.isAdmin) {
+          this.response.statusCode = 401;
+          var result = JSON.stringify({
+            "error": "Not authorized."
+          })
+          this.response.write(result);
+          this.response.end();
+          return;
+        }
 
-            this.response.write(QueryUser(this.params.query));
-            this.response.end();
-          }
+        this.response.write(QueryUser(this.params.query));
+        this.response.end();
       }
+    }
   });
 
   Router.route('users', {
@@ -404,6 +404,22 @@ Meteor.startup(function() {
           var boolIsVIP = isVIP ? true : false
           UpdateVIP(parseId, boolIsVIP, this.response);
         }
+      } else if (this.request.method == 'DELETE') {
+          //客户端要求在PUT方法里加入删除用户的操作
+          var deleteUser = this.params.query.deleteUser;
+          var user = Meteor.users.findOne({parseId: parseId});
+          if (!user || !user.isAdmin) {
+              this.response.statusCode = 400;
+              var result = JSON.stringify({
+                "result": false,
+                "error": "Not authorized"
+              })
+              this.response.write(result);
+              this.response.end();
+              return;
+          }
+
+          DelUserInfo(deleteUser, this.response);
       }
     }
   });
@@ -506,6 +522,9 @@ Meteor.startup(function() {
             var limit = parseInt(this.params.query.limit);
             var skip = parseInt(this.params.query.skip);
             var deviceType = this.params.query.deviceType;
+
+            var app_version = this.params.query.version;
+
             this.response.write(GetCategoryShowOff(userId, itemId, limit, skip, deviceType));
             this.response.end();
             break;
