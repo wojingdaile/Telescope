@@ -524,8 +524,11 @@ Meteor.startup(function() {
             var deviceType = this.params.query.deviceType;
 
             var app_version = this.params.query.version;
-
-            this.response.write(GetCategoryShowOff(userId, itemId, limit, skip, deviceType));
+            if (app_version && parseInt(app_version) >= 79) {
+                this.response.write(GetCategoryShowOffInReview(userId, itemId, limit, skip, deviceType));
+            } else {
+                this.response.write(GetCategoryShowOff(userId, itemId, limit, skip, deviceType));
+            }
             this.response.end();
             break;
           }

@@ -163,6 +163,64 @@ GetCategoryShowOff = function(userId, itemId, limitSegment, skip, device_Type) {
   return JSON.stringify(res);
 };
 
+GetCategoryShowOffInReview = function(userId, itemId, limitSegment, skip, device_Type) {
+  var showoffs = [];
+  var limit = typeof limitSegment === 'undefined' ? 20 : limitSegment // default limit: 20 showoffs
+  var search = {deviceType: device_Type};
+  if (itemId != undefined) {
+      search['_id'] = itemId;
+  }
+
+  skip = typeof skip === 'undefined' ? 0 : skip;
+  console.log("will get showoff inReview limit " + limit + " skip " + skip);
+  console.log("deviceType : " + device_Type);
+  ShowoffsInReview.find(search, {sort: {createdAt: -1},limit: limit,skip: skip}).forEach(function(showoffItem) {
+    var hasPurchased = showoffItem.purchasers != undefined ? (showoffItem.purchasers.contains(userId)? true: false) : false;
+    var hasLiked = showoffItem.upvoters != undefined ? (showoffItem.upvoters.contains(userId)? true: false)  : false;
+
+    var authorAvatar;
+    var authorName;
+    var isAuthorVIP;
+    var author =  Meteor.users.findOne({_id: showoffItem.authorId});
+    if (author != undefined) {
+      authorAvatar = author.avatar;
+      authorName = author.username;
+      isAuthorVIP = author.isVIP;
+    }
+
+    var properties = {
+
+      showOffID: showoffItem._id,
+      authorId: showoffItem.authorId,
+      authorName: authorName,
+      authorFaceURL: authorAvatar,
+      themeDisplayName: showoffItem.themeDisplayName,
+      descriptionTitle: showoffItem.descriptionTitle,
+      introduce: showoffItem.descriptionContent,
+      previewURL: showoffItem.bigPreviewURL,
+      packageURL: showoffItem.packageURL,
+      price: showoffItem.price,
+      numOfDownload:showoffItem.purchases,
+      numOfLikes:showoffItem.upvotes,
+      numOfComments:showoffItem.commentConut,
+      uploadedAt:showoffItem.createdAt,
+      bigPreviewWidth:showoffItem.bigPreviewWidth,
+      bigPreviewHeight:showoffItem.bigPreviewHeight,
+      hasPurchased:hasPurchased,
+      hasLiked:hasLiked,
+      parseId:showoffItem.parseId,
+      fontName:showoffItem.fontName,
+      isAuthorVIP:isAuthorVIP
+
+    };
+    showoffs.push(properties);
+  });
+  var res = {
+    showoffs: showoffs
+  };
+  return JSON.stringify(res);
+};
+
 LikeShowOff = function(showOffId, userId, response) {
 
   if (!showOffId || !userId) {
