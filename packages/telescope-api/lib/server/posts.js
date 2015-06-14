@@ -254,10 +254,10 @@ AddPost = function(newPost, response) {
   var title = newPost.title || "";
   var text = newPost.htmlBody || "";
   var text = title + text;
-  if (text.match("fuck|ass|dick|sex|boob|naked")) {
+  if (text.toLowerCase().match("fuck|ass|dick|sex|boob|naked")) {
       var result = {
           result: false,
-          error: "Be polite and no cursing. "
+          error: "Be polite and no cursing"
         };
         response.write(JSON.stringify(result));
         response.end();

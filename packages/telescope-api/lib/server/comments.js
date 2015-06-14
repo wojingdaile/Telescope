@@ -151,10 +151,10 @@ AddComment = function(newComment, response){
 
   // temporarily spam filter with RegEx, should be replaced with DFA
   var text = newComment.htmlBody || "";
-  if (text.match("fuck|ass|dick|sex|boob|naked")) {
+  if (text.toLowerCase().match("fuck|ass|dick|sex|boob|naked")) {
       var result = {
           result: false,
-          error: "Be polite and no cursing. "
+          error: "Be polite and no cursing"
         };
         response.write(JSON.stringify(result));
         response.end();
