@@ -150,7 +150,7 @@ AddComment = function(newComment, response){
   }
 
   // temporarily spam filter with RegEx, should be replaced with DFA
-  var text = newComment.htmlBody || "";
+  var text = newComment.body || "";
   if (text.toLowerCase().match("fuck|ass|dick|sex|boob|naked")) {
       var result = {
           result: false,

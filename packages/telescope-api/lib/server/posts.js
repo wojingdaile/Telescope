@@ -252,7 +252,7 @@ AddPost = function(newPost, response) {
 
   // temporarily spam filter with RegEx, should be replaced with DFA
   var title = newPost.title || "";
-  var text = newPost.htmlBody || "";
+  var text = newPost.body || "";
   var text = title + text;
   if (text.toLowerCase().match("fuck|ass|dick|sex|boob|naked")) {
       var result = {
