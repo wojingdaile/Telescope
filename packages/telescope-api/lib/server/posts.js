@@ -46,7 +46,7 @@ GetPostFromJsonString = function(jsonString) {
   var res = true;
   var missingProperty;
   providePostProperties.forEach(function(property) {
-    
+
     if (property == "categories") {
       newPost["categories"] = [jsonString["categories"]];
     } else {
@@ -249,6 +249,21 @@ AddPost = function(newPost, response) {
     response.end();
     return;
   }
+
+  // temporarily spam filter with RegEx, should be replaced with DFA
+  var title = newPost.title || "";
+  var text = newPost.htmlBody || "";
+  var text = title + text;
+  if (text.match("fuck|ass|dick|sex|boob|naked")) {
+      var result = {
+          result: false,
+          error: "Be polite and no cursing. "
+        };
+        response.write(JSON.stringify(result));
+        response.end();
+        return;
+  }
+
   console.log("insert new post:" + JSON.stringify(newPost));
   Posts.insert(newPost, function(error, newPostId) {
     if (error) {

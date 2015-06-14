@@ -148,6 +148,19 @@ AddComment = function(newComment, response){
       response.end();
       return;
   }
+
+  // temporarily spam filter with RegEx, should be replaced with DFA
+  var text = newComment.htmlBody || "";
+  if (text.match("fuck|ass|dick|sex|boob|naked")) {
+      var result = {
+          result: false,
+          error: "Be polite and no cursing. "
+        };
+        response.write(JSON.stringify(result));
+        response.end();
+        return;
+  }
+
   console.log("insert new comment: " + JSON.stringify(newComment));
   Comments.insert(newComment, function(error, commentId){
 
@@ -317,4 +330,3 @@ DeDownVoteComment = function(commentId, userId, response){
   response.write(JSON.stringify({result: result}));
   response.end();
 }
-
