@@ -150,16 +150,16 @@ AddComment = function(newComment, response){
   }
 
   // temporarily spam filter with RegEx, should be replaced with DFA
-  var text = newComment.body || "";
-  if (text.toLowerCase().match("fuck|ass|dick|sex|boob|naked")) {
-      var result = {
-          result: false,
-          error: "Be polite and no cursing"
-        };
-        response.write(JSON.stringify(result));
-        response.end();
-        return;
-  }
+  // var text = newComment.body || "";
+  // if (text.toLowerCase().match("fuck|ass|dick|sex|boob|naked")) {
+  //     var result = {
+  //         result: false,
+  //         error: "Be polite and no cursing"
+  //       };
+  //       response.write(JSON.stringify(result));
+  //       response.end();
+  //       return;
+  // }
 
   console.log("insert new comment: " + JSON.stringify(newComment));
   Comments.insert(newComment, function(error, commentId){
