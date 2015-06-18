@@ -23,12 +23,12 @@ GetPostCommentFromJsonString = function(jsonString){
   var providePostProperties = ['author', 'body', 'htmlBody', 'postId', 'userId'];
   var defaultComment = {
        baseScore: 0,
-       createdAt: new Date(), 
-       downvotes: 0, 
-       postedAt: new Date(), 
-       score: 0, 
+       createdAt: new Date(),
+       downvotes: 0,
+       postedAt: new Date(),
+       score: 0,
        upvoters: [],
-       upvotes: 0, 
+       upvotes: 0,
        level: 1,
        inactive: true,
        parseId: parseId
@@ -60,6 +60,18 @@ GetPostCommentFromJsonString = function(jsonString){
 
 AddPostComment= function(newComment, response){
 
+  // temporarily spam filter with RegEx, should be replaced with DFA
+  var text = newComment.body || "";
+  if (text.toLowerCase().match(/\b(ass|fuck|dick|sex|sexy|boob|naked|bitch)\b/g)) {
+      var result = {
+          result: false,
+          error: "Be polite and no cursing"
+        };
+        response.write(JSON.stringify(result));
+        response.end();
+        return;
+  }
+  
 	Comments.insert(newComment, function(error, commentId) {
 		if (error) {
 			var res = {
