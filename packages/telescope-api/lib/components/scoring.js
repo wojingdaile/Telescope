@@ -121,11 +121,6 @@ updateShowOffScore = function (args) {
   var purchases = item.purchases || 0;
   var baseScore = votes + purchases * 2 + 1;    // make purchases more valuable
 
-  // improve newest showoff visibility
-  if (ageInHours < 1.0) {
-      baseScore += 15;
-  }
-
   // HN algorithm
   var newScore = baseScore / Math.pow(ageInHours + 2, f);
 
