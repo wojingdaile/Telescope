@@ -254,7 +254,7 @@ AddPost = function(newPost, response) {
   var title = newPost.title || "";
   var text = newPost.body || "";
   var text = title + text;
-  if (text.toLowerCase().match("(^ass | ass$| ass )|(^fuck | fuck$| fuck )|(^dick | dick$| dick )|(^sex | sex$| sex )|(^sexy | sexy$| sexy )|(^boob | boob$| boob )|(^naked | naked$| naked )")) {
+  if (text.toLowerCase().match(/\b(ass|fuck|dick|sex|sexy|boob|naked|bitch)\b/g)) {
       var result = {
           result: false,
           error: "Be polite and no cursing"
