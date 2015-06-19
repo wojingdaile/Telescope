@@ -62,7 +62,7 @@ AddPostComment= function(newComment, response){
 
   // temporarily spam filter with RegEx, should be replaced with DFA
   var text = newComment.body || "";
-  if (text.toLowerCase().match(/\b(ass|fuck|dick|sex|sexy|boob|naked|bitch)\b/g)) {
+  if (text.toLowerCase().match(badWordsReg)) {
       var result = {
           result: false,
           error: "Be polite and no cursing"
@@ -71,7 +71,7 @@ AddPostComment= function(newComment, response){
         response.end();
         return;
   }
-  
+
 	Comments.insert(newComment, function(error, commentId) {
 		if (error) {
 			var res = {

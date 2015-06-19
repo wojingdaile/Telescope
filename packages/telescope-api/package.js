@@ -17,7 +17,8 @@ Package.onUse(function (api) {
                  'lib/components/scoring.js',
                  'lib/components/vote.js' ,
                  'lib/server/showoff.js',
-                 'lib/server/showoffComment.js'], ['server']);
+                 'lib/server/showoffComment.js',
+                 'lib/components/badwordsreg.js'], ['server']);
 
   api.export(['serveAPI']);
 
