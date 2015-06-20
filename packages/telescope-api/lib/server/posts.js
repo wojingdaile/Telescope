@@ -3,23 +3,23 @@ GetPostFromJsonString = function(jsonString) {
   console.log("get post from json string: " + JSON.stringify(jsonString));
   var userId = jsonString["userId"];
   var parseId;
-  if(userId == undefined){
+  if (userId == undefined) {
     result = {
       result: false,
       error: "property not found: userId"
     };
     return result;
-  }
-  else{
-    var user =  Meteor.users.findOne({_id: userId});
-    if(user == undefined){
+  } else {
+    var user = Meteor.users.findOne({
+      _id: userId
+    });
+    if (user == undefined) {
       result = {
         result: false,
         error: "user not found"
       };
       return result;
-    }
-    else{
+    } else {
       parseId = user.parseId;
     }
   }
@@ -61,7 +61,7 @@ GetPostFromJsonString = function(jsonString) {
 
   });
 
-  if(jsonString["attactments"] != undefined){
+  if (jsonString["attactments"] != undefined) {
     newPost["attactments"] = jsonString["attactments"];
   }
 
@@ -93,16 +93,28 @@ GetPostFromJsonString = function(jsonString) {
   return result;
 }
 
-GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
+GetCategoryPosts = function(categorySegment, userId, limitSegment, skip, targetUserId) {
   var posts = [];
   var category = typeof limitSegment === 'undefined' ? 'top' : categorySegment;
   var limit = typeof limitSegment === 'undefined' ? 20 : limitSegment // default limit: 20 posts
   skip = typeof skip === 'undefined' ? 0 : skip;
 
-  Posts.find({
+  var conditions = {
     categories: [category],
     status: STATUS_APPROVED
-  },{sort: {createdAt: -1},limit: limit,skip: skip}).forEach(function(post) {
+  };
+
+  if (targetUserId != undefined && targetUserId != null) {
+    conditions.parseId = targetUserId;
+  }
+
+  Posts.find(conditions, {
+    sort: {
+      createdAt: -1
+    },
+    limit: limit,
+    skip: skip
+  }).forEach(function(post) {
 
     var url = getPostLink(post);
     var hasUpvote = false;
@@ -111,19 +123,21 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       if ((post.upvoters != undefined) && post.upvoters.contains(userId)) {
         hasUpvote = true;
       }
-      if(post.downvoters != undefined && post.downvoters.contains(userId)){
+      if (post.downvoters != undefined && post.downvoters.contains(userId)) {
         hasDownVote = true;
       }
     }
 
     var avatar = "";
-    var isAuthorVIP  = false;
-    if(post.userId != undefined){
-      var user = Meteor.users.findOne({_id: post.userId});
+    var isAuthorVIP = false;
+    if (post.userId != undefined) {
+      var user = Meteor.users.findOne({
+        _id: post.userId
+      });
       if (user != undefined) {
-          avatar = user.avatar;
-          isAuthorVIP = user.isVIP;
-        };
+        avatar = user.avatar;
+        isAuthorVIP = user.isVIP;
+      };
     }
     var properties = {
       title: post.title,
@@ -139,19 +153,19 @@ GetCategoryPosts = function(categorySegment, userId, limitSegment, skip) {
       downvoted: hasDownVote,
       userId: post.userId,
       commentCount: post.commentCount,
-      parseId:post.parseId,
+      parseId: post.parseId,
       avatar: avatar,
       isAuthorVIP: isAuthorVIP
 
     };
     if (post.body)
       properties.body = post.body;
-    if(post.htmlBody)
+    if (post.htmlBody)
       properties.htmlBody = post.htmlBody;
-    if(post.attactments)
+    if (post.attactments)
       properties.attactments = post.attactments;
     if (post.version != undefined)
-        properties.version = post.version;
+      properties.version = post.version;
 
     if (post.url)
       properties.domain = getDomain(url);
@@ -255,13 +269,13 @@ AddPost = function(newPost, response) {
   var text = newPost.body || "";
   var text = title + text;
   if (text.toLowerCase().match(badWordsReg)) {
-      var result = {
-          result: false,
-          error: "Be polite and no cursing"
-        };
-        response.write(JSON.stringify(result));
-        response.end();
-        return;
+    var result = {
+      result: false,
+      error: "Be polite and no cursing"
+    };
+    response.write(JSON.stringify(result));
+    response.end();
+    return;
   }
 
   console.log("insert new post:" + JSON.stringify(newPost));
@@ -309,7 +323,7 @@ UpVotePost = function(postId, userId, response) {
   response.end();
 }
 
-DeUpVotePost = function(postId, userId, response){
+DeUpVotePost = function(postId, userId, response) {
 
   if (!postId || !userId) {
     result = {
@@ -407,14 +421,15 @@ UpdatePost = function(postId, newBody, response) {
   })
 }
 
-AddAttacments = function(postId, attacments, response){
+AddAttacments = function(postId, attacments, response) {
 
   Posts.update({
-    _id:postId
-  },
-  {
-    $set: {attactments : attacments}
-  }, function(error, numOfFileAffected){
+    _id: postId
+  }, {
+    $set: {
+      attactments: attacments
+    }
+  }, function(error, numOfFileAffected) {
     var result;
     if (error) {
       result = {

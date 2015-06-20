@@ -76,8 +76,9 @@ Meteor.startup(function() {
             var category = this.params.query.category;
             var limit = parseInt(this.params.query.limit);
             var skip = parseInt(this.params.query.skip);
+            var targetUserId = this.params.query.targetUserId;
 
-            this.response.write(GetCategoryPosts(category, userId, limit, skip));
+            this.response.write(GetCategoryPosts(category, userId, limit, skip, targetUserId));
             this.response.end();
             break;
           }
@@ -524,7 +525,7 @@ Meteor.startup(function() {
             var deviceType = this.params.query.deviceType;
 
             var app_version = this.params.query.version;
-            if (app_version && parseInt(app_version) >= 79) {
+            if (app_version && parseInt(app_version) >= 80) {
                 this.response.write(GetCategoryShowOffInReview(userId, itemId, limit, skip, deviceType));
             } else {
                 this.response.write(GetCategoryShowOff(userId, itemId, limit, skip, deviceType));
